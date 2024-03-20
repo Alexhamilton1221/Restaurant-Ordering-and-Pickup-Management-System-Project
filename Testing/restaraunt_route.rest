@@ -19,7 +19,7 @@ Content-Type: application/json
 
 ### Delete restaurant
 
-DELETE http://localhost:3000/restaurants/65fb3b8b8520f755e67b654f
+DELETE http://localhost:3000/restaurants/65fb47a33e10088a7aee2212
 
 ### Update restaurant
 
@@ -27,7 +27,24 @@ PATCH http://localhost:3000/restaurants/65fb3b8b8520f755e67b654f
 Content-Type: application/json
 
 {
-    "name": "Tasty Tavern",
-    "location": "456 Elm St",
+    "name": "New Dawn",
+    "location": "456 Elm St new",
     "rating": 4.7
 }
+
+### Add item to restaurant's menu
+POST http://localhost:3000/restaurants/65fb3b8b8520f755e67b654f/menu
+Content-Type: application/json
+
+{
+    "name": "Fries",
+    "price": 2.99,
+    "description": "Delicious burger with all the fixings",
+    "soldOut": false
+}
+
+### Delete item from restaurant's menu
+DELETE http://localhost:3000/restaurants/65fb3b8b8520f755e67b654f/menu/65fb47be3e10088a7aee221b
+
+### Get a item from a restaurant
+GET http://localhost:3000/restaurants/65fb3b8b8520f755e67b654f/menu/65fb481ac9889b94e5b9588c

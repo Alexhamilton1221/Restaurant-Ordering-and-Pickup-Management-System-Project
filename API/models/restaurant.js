@@ -1,4 +1,5 @@
 // Restaurant Schema
+
 const mongoose = require("mongoose");
 
 const restaurantSchema = new mongoose.Schema({
@@ -30,7 +31,10 @@ const menuItemSchema = new mongoose.Schema({
     required: true,
   },
   description: String,
-  // Other menu item attributes...
+  soldOut: {
+    type: Boolean,
+    default: false, // By default, items are not sold out
+  },
 });
 
 const Restaurant = mongoose.model("Restaurant", restaurantSchema);
