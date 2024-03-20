@@ -21,6 +21,9 @@ db.once("open", (error) => console.log("Connected to Database"));
 const userRouter = require("./routes/users");
 app.use("/users", userRouter);
 
+const restaurantRouter = require("./routes/restaurants");
+app.use("/restaurants", restaurantRouter);
+
 // // Create
 // app.get("/users", (req, res) => {
 //   //Fetch User Data

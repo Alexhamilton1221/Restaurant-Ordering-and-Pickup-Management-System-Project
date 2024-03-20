@@ -1,3 +1,5 @@
+// Operations for users
+
 const express = require("express"); // express web server
 const router = express.Router();
 const User = require("../models/user");

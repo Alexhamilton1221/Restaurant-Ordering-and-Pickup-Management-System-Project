@@ -1,0 +1,33 @@
+### Get all restaurants
+
+GET http://localhost:3000/restaurants
+
+### Get a restaurant
+
+GET http://localhost:3000/restaurants/65fb3b8b8520f755e67b654f
+
+### Create restaurant
+
+POST http://localhost:3000/restaurants
+Content-Type: application/json
+
+{
+    "name": "Delicious Diner 2",
+    "location": "123 Main St",
+    "rating": 4.5
+}
+
+### Delete restaurant
+
+DELETE http://localhost:3000/restaurants/65fb3b8b8520f755e67b654f
+
+### Update restaurant
+
+PATCH http://localhost:3000/restaurants/65fb3b8b8520f755e67b654f
+Content-Type: application/json
+
+{
+    "name": "Tasty Tavern",
+    "location": "456 Elm St",
+    "rating": 4.7
+}
