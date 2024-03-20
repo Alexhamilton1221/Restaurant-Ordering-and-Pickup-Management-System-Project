@@ -1,0 +1,39 @@
+### Get all orders
+
+GET http://localhost:3000/orders
+
+### Get an order
+
+GET http://localhost:3000/orders/65fb3b8b8520f755e67b654f
+
+### Create order
+
+POST http://localhost:3000/orders
+Content-Type: application/json
+
+{
+    "userId": "65fa52e9fd40cf12697c3882",
+    "restaurantId": "65fb3b8b8520f755e67b654f",
+    "items": [
+        { "menuItemId": "65fb47cf3e10088a7aee2221", "quantity": 2 },
+        { "menuItemId": "65fb481ac9889b94e5b9588c", "quantity": 1 }
+    ]
+}
+
+
+### Delete order
+
+DELETE http://localhost:3000/orders/65fb54fa7dd8d9d6de172ac9
+
+### Update order
+
+PATCH http://localhost:3000/orders/65fb3b8b8520f755e67b654f
+Content-Type: application/json
+
+{
+    "userId": "65fb3b8b8520f755e67b654f",
+    "restaurantId": "65fb3b8b8520f755e67b654f",
+    "items": [
+        { "menuItemId": "65fb3b8b8520f755e67b654f", "quantity": 3 }
+    ]
+}

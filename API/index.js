@@ -24,6 +24,8 @@ app.use("/users", userRouter);
 const restaurantRouter = require("./routes/restaurants");
 app.use("/restaurants", restaurantRouter);
 
+const orderRouter = require("./routes/orders");
+app.use("/orders", orderRouter);
 // // Create
 // app.get("/users", (req, res) => {
 //   //Fetch User Data
