@@ -1,5 +1,4 @@
 import React from "react";
-import Button from "./Button"; // Import the Button component
 import "./Header.css"; // Import the Header CSS file
 
 const Header = () => {
@@ -10,12 +9,7 @@ const Header = () => {
           <a className="navbar-brand" href="#">
             MealMate
           </a>
-          <div className="header-buttons">
-            {" "}
-            {/* Add the header-buttons class */}
-            <Button color="blue" text="Login" />{" "}
-            {/* Pass the desired color and text */}
-          </div>
+          {/* No button component */}
         </div>
       </nav>
     </header>

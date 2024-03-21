@@ -1,7 +1,7 @@
 import React from "react";
 import "./Button.css"; // Import the CSS file
 
-const Button = ({ color, text, onClick }) => {
+const Button = ({ color, text, onClick, cssFile }) => {
   const buttonClass = `button ${color}`;
 
   return (
