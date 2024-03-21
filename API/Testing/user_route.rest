@@ -12,13 +12,15 @@ POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-    "name": "Joey",
-    "age": 14
+    "name": "Sam",
+    "age": 14,
+    "username": "joey123",
+    "password": "password123"
 }
 
 ### Delete user
 
-DELETE http://localhost:3000/users/65fb3816068d8b01ddcec9ee
+DELETE http://localhost:3000/users/65fa7fca96a9e70b7f57e6e7
 
 ### Update user
 
@@ -27,5 +29,7 @@ Content-Type: application/json
 
 {
     "name": "Bob Ross",
-    "age": 54
+    "age": 54,
+    "username": "bobross",
+    "password": "newpassword"
 }

@@ -17,16 +17,16 @@
   display: flex;
   margin-right: 20px; /* Add margin to the right */
 }
-
+/*
 .header-buttons button {
-  border-radius: 20px; /* Rounded corners */
+  border-radius: 20px; 
   background-color: rgb(101, 204, 230);
   color: white;
   padding: 10px 20px;
   border: none;
   cursor: pointer;
 }
-
+*/
 .navbar-brand {
   /* font-family: "Faith", sans-serif; */
   font-family: "Roblox", sans-serif;

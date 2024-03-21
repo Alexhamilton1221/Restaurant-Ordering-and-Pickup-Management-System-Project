@@ -1,0 +1,57 @@
+/* Login.css */
+.login-page {
+  display: flex;
+  height: 100vh; /* Make the login page cover the entire viewport height */
+}
+
+.left-bar,
+.right-bar {
+  width: 50px; /* Adjust the width of the black bars as needed */
+  background-color: black;
+  flex-shrink: 0; /* Prevent the black bars from shrinking */
+}
+
+.content {
+  flex: 1; /* Take up remaining space */
+  display: flex;
+  flex-direction: column; /* Align items vertically */
+  justify-content: flex-start; /* Align content at the top */
+  align-items: center; /* Center content horizontally */
+  padding-top: 20px; /* Add padding to the top */
+}
+
+.content h1 {
+  font-size: 46px; /* Adjust font size as needed */
+  text-align: center; /* Center text horizontally */
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.input-field {
+  width: 300px; /* Set the width of input fields */
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+}
+
+.login-button {
+  width: 150px; /* Set the width of the login button */
+  padding: 10px;
+  background-color: rgb(101, 204, 230);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+}
+
+.login-button:hover {
+  background-color: rgb(81, 184, 210); /* Darker background color on hover */
+}
