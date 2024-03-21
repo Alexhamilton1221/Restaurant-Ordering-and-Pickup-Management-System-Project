@@ -1,0 +1,11 @@
+.button {
+  border-radius: 20px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  color: white;
+}
+
+/* .blue {
+    background-color: rgb(101, 204, 230);
+  } */

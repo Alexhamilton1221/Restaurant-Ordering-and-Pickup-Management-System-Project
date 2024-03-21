@@ -1,0 +1,14 @@
+.App {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.navbar-brand {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.float-right {
+  float: right;
+}

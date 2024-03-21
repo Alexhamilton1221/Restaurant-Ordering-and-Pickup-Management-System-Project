@@ -1,0 +1,37 @@
+/* Header.css */
+@font-face {
+  font-family: "MemphisRiver";
+  src: url("../fonts/MemphisRiver.ttf");
+}
+.header {
+  width: 100%;
+}
+
+.container-fluid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-buttons {
+  display: flex;
+  margin-right: 20px; /* Add margin to the right */
+}
+
+.header-buttons button {
+  border-radius: 20px; /* Rounded corners */
+  background-color: rgb(101, 204, 230);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.navbar-brand {
+  /* font-family: "Faith", sans-serif; */
+  font-family: "Roblox", sans-serif;
+  font-weight: "Bold";
+  font-size: 24px;
+  text-decoration: none; /* Remove underline */
+  color: inherit; /* Inherit color */
+}
