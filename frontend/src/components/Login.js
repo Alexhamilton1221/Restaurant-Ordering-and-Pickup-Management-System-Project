@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./Header.css"; // Import the Header CSS file
+import "./styles/Button.css"; // Import the Header CSS file
 import Button from "./Button"; // Import the Button component
 
 const Login = () => {
@@ -8,7 +8,8 @@ const Login = () => {
 
   // Function to handle login button click
   const handleLogin = () => {
-    // Navigate to the desired page after login, e.g., homepage
+    // Navigate to the homepage
+    console.log("lets move");
     navigate("/homepage");
   };
 

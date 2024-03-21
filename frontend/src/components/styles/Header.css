@@ -1,7 +1,7 @@
 /* Header.css */
 @font-face {
   font-family: "MemphisRiver";
-  src: url("../fonts/MemphisRiver.ttf");
+  src: url("../../fonts/MemphisRiver.ttf");
 }
 .header {
   width: 100%;
