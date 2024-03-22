@@ -1,11 +1,14 @@
 // Login.js
-import "./styles/Login.css";
+import "../styles/Login.css";
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate(); // Use useNavigate hook to navigate
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -16,7 +19,9 @@ const Login = () => {
       });
 
       console.log("Login successful:", response.data);
-      // Redirect to homepage or perform other actions upon successful login
+      // Redirect to homepage upon successful login
+
+      navigate("/homepage");
     } catch (error) {
       console.error("Login failed:", error);
       // Handle login failure, e.g., display error message to the user

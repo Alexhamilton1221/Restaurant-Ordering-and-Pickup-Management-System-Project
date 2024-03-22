@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./styles/LandingPage.css"; // Import the LandingPage CSS file
-import Button from "./Button"; // Import the Button component
+import "../styles/LandingPage.css"; // Import the LandingPage CSS file
+import Button from "../Button"; // Import the Button component
 
 const LandingPage = () => {
   const navigate = useNavigate(); // Use useNavigate hook to navigate
