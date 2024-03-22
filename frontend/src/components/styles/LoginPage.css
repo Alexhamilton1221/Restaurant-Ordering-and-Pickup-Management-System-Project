@@ -6,7 +6,7 @@
 
 .left-bar,
 .right-bar {
-  width: 50px; /* Adjust the width of the black bars as needed */
+  width: 500px; /* Adjust the width of the black bars as needed */
   background-color: black;
   flex-shrink: 0; /* Prevent the black bars from shrinking */
 }
