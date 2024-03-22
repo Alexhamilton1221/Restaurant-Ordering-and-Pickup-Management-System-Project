@@ -51,7 +51,8 @@ const Homepage = () => {
             <ul>
               {restaurant.menu.map((menuItem) => (
                 <li key={menuItem._id}>
-                  {menuItem.name} - ${menuItem.price}
+                  {menuItem.name} - ${menuItem.price}{" "}
+                  {menuItem.soldOut && <span>(Sold Out)</span>}
                 </li>
               ))}
             </ul>

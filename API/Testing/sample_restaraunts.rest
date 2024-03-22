@@ -3,129 +3,153 @@ POST http://localhost:4000/restaurants
 Content-Type: application/json
 
 {
-    "name": "Star Spot",
-    "location": "567 Candy Cane Lane",
-    "rating": 3.0,
+   "name": "Tasty Bites",
+  "location": "123 Main Street",
+  "rating": 4.5,
     "menu": [
-        {
+            {
             "name": "Spaghetti Carbonara",
             "price": 12.99,
-            "description": "Classic Italian pasta dish with bacon, eggs, and cheese."
+            "description": "Classic Italian pasta dish with bacon, eggs, and cheese.",
+            "soldOut": false
         },
         {
             "name": "Margherita Pizza",
             "price": 10.99,
-            "description": "Traditional Italian pizza with tomato, mozzarella, and basil."
+            "description": "Traditional Italian pizza with tomato, mozzarella, and basil.",
+            "soldOut": true
         },
         {
             "name": "Chicken Alfredo",
             "price": 14.99,
-            "description": "Creamy pasta dish with grilled chicken and Alfredo sauce."
+            "description": "Creamy pasta dish with grilled chicken and Alfredo sauce.",
+            "soldOut": false
         },
         {
             "name": "Caesar Salad",
             "price": 8.99,
-            "description": "Fresh romaine lettuce with Caesar dressing, croutons, and Parmesan cheese."
+            "description": "Fresh romaine lettuce with Caesar dressing, croutons, and Parmesan cheese.",
+            "soldOut": true
         },
         {
             "name": "Cheeseburger",
             "price": 9.99,
-            "description": "Juicy beef patty topped with cheese, lettuce, tomato, and pickles."
+            "description": "Juicy beef patty topped with cheese, lettuce, tomato, and pickles.",
+            "soldOut": false
         },
         {
             "name": "Chicken Wings",
             "price": 11.99,
-            "description": "Crispy fried chicken wings served with your choice of sauce."
+            "description": "Crispy fried chicken wings served with your choice of sauce.",
+            "soldOut": true
         },
         {
             "name": "Fish and Chips",
             "price": 13.99,
-            "description": "Deep-fried fish fillets served with crispy fries and tartar sauce."
+            "description": "Deep-fried fish fillets served with crispy fries and tartar sauce.",
+            "soldOut": false
         },
         {
             "name": "Caesar Wrap",
             "price": 9.99,
-            "description": "Caesar salad wrapped in a flour tortilla for a convenient handheld meal."
+            "description": "Caesar salad wrapped in a flour tortilla for a convenient handheld meal.",
+            "soldOut": true
         },
         {
             "name": "Mushroom Risotto",
             "price": 12.99,
-            "description": "Creamy Italian rice dish cooked with mushrooms and Parmesan cheese."
+            "description": "Creamy Italian rice dish cooked with mushrooms and Parmesan cheese.",
+            "soldOut": false
         },
         {
             "name": "Tiramisu",
             "price": 6.99,
-            "description": "Classic Italian dessert made with layers of coffee-soaked ladyfingers and mascarpone cheese."
+            "description": "Classic Italian dessert made with layers of coffee-soaked ladyfingers and mascarpone cheese.",
+            "soldOut": true
         },
         {
             "name": "New York Cheesecake",
             "price": 7.99,
-            "description": "Rich and creamy cheesecake with a graham cracker crust, topped with fruit compote."
+            "description": "Rich and creamy cheesecake with a graham cracker crust, topped with fruit compote.",
+            "soldOut": false
         },
         {
             "name": "Garlic Bread",
             "price": 4.99,
-            "description": "Toasted bread slices rubbed with garlic and butter, perfect for sharing."
+            "description": "Toasted bread slices rubbed with garlic and butter, perfect for sharing.",
+            "soldOut": true
         },
         {
             "name": "Caprese Salad",
             "price": 8.99,
-            "description": "Fresh tomato and mozzarella salad drizzled with balsamic glaze and basil oil."
+            "description": "Fresh tomato and mozzarella salad drizzled with balsamic glaze and basil oil.",
+            "soldOut": false
         },
         {
             "name": "Beef Tacos",
             "price": 10.99,
-            "description": "Soft corn tortillas filled with seasoned ground beef, lettuce, cheese, and salsa."
+            "description": "Soft corn tortillas filled with seasoned ground beef, lettuce, cheese, and salsa.",
+            "soldOut": true
         },
         {
             "name": "Vegetable Stir Fry",
             "price": 11.99,
-            "description": "Assorted vegetables stir-fried in a savory sauce, served over steamed rice."
+            "description": "Assorted vegetables stir-fried in a savory sauce, served over steamed rice.",
+            "soldOut": false
         },
         {
             "name": "Pulled Pork Sandwich",
             "price": 9.99,
-            "description": "Slow-cooked pulled pork piled high on a toasted bun, served with coleslaw."
+            "description": "Slow-cooked pulled pork piled high on a toasted bun, served with coleslaw.",
+            "soldOut": true
         },
         {
             "name": "Chocolate Brownie Sundae",
             "price": 8.99,
-            "description": "Warm chocolate brownie topped with vanilla ice cream, chocolate sauce, and whipped cream."
+            "description": "Warm chocolate brownie topped with vanilla ice cream, chocolate sauce, and whipped cream.",
+            "soldOut": false
         },
         {
             "name": "Chicken Caesar Wrap",
             "price": 9.99,
-            "description": "Grilled chicken, romaine lettuce, and Caesar dressing wrapped in a tortilla."
+            "description": "Grilled chicken, romaine lettuce, and Caesar dressing wrapped in a tortilla.",
+            "soldOut": true
         },
         {
             "name": "Shrimp Scampi",
             "price": 15.99,
-            "description": "Garlic-infused shrimp served over pasta with a buttery wine sauce."
+            "description": "Garlic-infused shrimp served over pasta with a buttery wine sauce.",
+            "soldOut": false
         },
         {
             "name": "Beef Burrito",
             "price": 10.99,
-            "description": "Flour tortilla filled with seasoned ground beef, rice, beans, cheese, and salsa."
+            "description": "Flour tortilla filled with seasoned ground beef, rice, beans, cheese, and salsa.",
+            "soldOut": true
         },
         {
             "name": "Chicken Quesadilla",
             "price": 9.99,
-            "description": "Grilled chicken and cheese melted between two flour tortillas, served with sour cream and salsa."
+            "description": "Grilled chicken and cheese melted between two flour tortillas, served with sour cream and salsa.",
+            "soldOut": false
         },
         {
             "name": "Vegetarian Pizza",
             "price": 11.99,
-            "description": "Pizza topped with assorted vegetables, tomato sauce, and mozzarella cheese."
+            "description": "Pizza topped with assorted vegetables, tomato sauce, and mozzarella cheese.",
+            "soldOut": true
         },
         {
             "name": "Chicken Parmesan",
             "price": 13.99,
-            "description": "Breaded chicken cutlet topped with marinara sauce and melted mozzarella cheese, served over spaghetti."
+            "description": "Breaded chicken cutlet topped with marinara sauce and melted mozzarella cheese, served over spaghetti.",
+            "soldOut": false
         },
         {
             "name": "Chocolate Lava Cake",
             "price": 6.99,
-            "description": "Warm chocolate cake with a gooey chocolate center, served with vanilla ice cream."
+            "description": "Warm chocolate cake with a gooey chocolate center, served with vanilla ice cream.",
+            "soldOut": true
         }
     ]
 }
@@ -137,122 +161,145 @@ Content-Type: application/json
     "name": "Star Spot",
     "location": "567 Candy Cane Lane",
     "rating": 3.0,
-    "menu": [  {
-    "name": "Vegetarian Lasagna",
-    "price": 11.99,
-    "description": "Layers of pasta, vegetables, and cheese baked to perfection."
-  },
-  {
-    "name": "Beef Stroganoff",
-    "price": 13.99,
-    "description": "Tender beef strips cooked in a creamy mushroom sauce, served over egg noodles."
-  },
-  {
-    "name": "Greek Salad",
-    "price": 9.99,
-    "description": "Crisp lettuce, tomatoes, cucumbers, olives, and feta cheese tossed in Greek dressing."
-  },
-  {
-    "name": "Hawaiian Pizza",
-    "price": 12.99,
-    "description": "Pizza topped with ham, pineapple, and mozzarella cheese."
-  },
-  {
-    "name": "Chicken Tikka Masala",
-    "price": 14.99,
-    "description": "Tender chicken pieces cooked in a spicy tomato-based sauce, served with rice."
-  },
-  {
-    "name": "Vegetable Curry",
-    "price": 10.99,
-    "description": "Assorted vegetables cooked in a flavorful curry sauce, served with naan bread."
-  },
-  {
-    "name": "Sushi Platter",
-    "price": 16.99,
-    "description": "Assorted sushi rolls including California rolls, tuna rolls, and salmon rolls."
-  },
-  {
-    "name": "Beef Burger",
-    "price": 11.99,
-    "description": "Juicy beef patty topped with lettuce, tomato, onion, and pickles on a sesame seed bun."
-  },
-  {
-    "name": "Mango Sticky Rice",
-    "price": 7.99,
-    "description": "Sweet sticky rice served with ripe mango slices and coconut milk."
-  },
-  {
-    "name": "Pasta Primavera",
-    "price": 10.99,
-    "description": "Pasta tossed with fresh vegetables in a light olive oil and garlic sauce."
-  },
-  {
-    "name": "Lemon Herb Roast Chicken",
-    "price": 15.99,
-    "description": "Roast chicken seasoned with lemon and herbs, served with roasted potatoes."
-  },
-  {
-    "name": "BBQ Ribs",
-    "price": 16.99,
-    "description": "Tender pork ribs smothered in tangy barbecue sauce, served with coleslaw and fries."
-  },
-  {
-    "name": "Avocado Toast",
-    "price": 8.99,
-    "description": "Sliced avocado on toasted artisan bread, sprinkled with sea salt and red pepper flakes."
-  },
-  {
-    "name": "Shrimp Cocktail",
-    "price": 12.99,
-    "description": "Chilled shrimp served with cocktail sauce and lemon wedges."
-  },
-  {
-    "name": "Mediterranean Platter",
-    "price": 14.99,
-    "description": "A selection of hummus, tzatziki, falafel, and stuffed grape leaves, served with pita bread."
-  },
-  {
-    "name": "Beef Pho",
-    "price": 13.99,
-    "description": "Vietnamese noodle soup with thinly sliced beef, rice noodles, and aromatic herbs."
-  },
-  {
-    "name": "Vegetable Spring Rolls",
-    "price": 9.99,
-    "description": "Crispy fried spring rolls filled with mixed vegetables, served with sweet chili sauce."
-  },
-  {
-    "name": "Chicken Satay",
-    "price": 11.99,
-    "description": "Grilled chicken skewers marinated in coconut milk and spices, served with peanut sauce."
-  },
-  {
-    "name": "Ratatouille",
-    "price": 10.99,
-    "description": "A traditional French stewed vegetable dish made with eggplant, zucchini, bell peppers, and tomatoes."
-  },
-  {
-    "name": "Tofu Stir Fry",
-    "price": 11.99,
-    "description": "Tofu and mixed vegetables stir-fried in a savory sauce, served over rice."
-  },
-  {
-    "name": "Mango Tango Smoothie",
-    "price": 6.99,
-    "description": "A refreshing smoothie made with ripe mangoes, banana, yogurt, and orange juice."
-  },
-  {
-    "name": "Beef Kebabs",
-    "price": 14.99,
-    "description": "Grilled beef skewers marinated in a blend of spices, served with grilled vegetables."
-  },
-
- {
-    "name": "Chocolate Lava Cake",
-    "price": 6.99,
-    "description": "Warm chocolate cake with a gooey chocolate center, served with vanilla ice cream."
-  }
+    "menu": [
+        {
+            "name": "Vegetarian Lasagna",
+            "price": 11.99,
+            "description": "Layers of pasta, vegetables, and cheese baked to perfection.",
+            "soldOut": false
+        },
+        {
+            "name": "Beef Stroganoff",
+            "price": 13.99,
+            "description": "Tender beef strips cooked in a creamy mushroom sauce, served over egg noodles.",
+            "soldOut": true
+        },
+        {
+            "name": "Greek Salad",
+            "price": 9.99,
+            "description": "Crisp lettuce, tomatoes, cucumbers, olives, and feta cheese tossed in Greek dressing.",
+            "soldOut": false
+        },
+        {
+            "name": "Hawaiian Pizza",
+            "price": 12.99,
+            "description": "Pizza topped with ham, pineapple, and mozzarella cheese.",
+            "soldOut": true
+        },
+        {
+            "name": "Chicken Tikka Masala",
+            "price": 14.99,
+            "description": "Tender chicken pieces cooked in a spicy tomato-based sauce, served with rice.",
+            "soldOut": false
+        },
+        {
+            "name": "Vegetable Curry",
+            "price": 10.99,
+            "description": "Assorted vegetables cooked in a flavorful curry sauce, served with naan bread.",
+            "soldOut": true
+        },
+        {
+            "name": "Sushi Platter",
+            "price": 16.99,
+            "description": "Assorted sushi rolls including California rolls, tuna rolls, and salmon rolls.",
+            "soldOut": false
+        },
+        {
+            "name": "Beef Burger",
+            "price": 11.99,
+            "description": "Juicy beef patty topped with lettuce, tomato, onion, and pickles on a sesame seed bun.",
+            "soldOut": true
+        },
+        {
+            "name": "Mango Sticky Rice",
+            "price": 7.99,
+            "description": "Sweet sticky rice served with ripe mango slices and coconut milk.",
+            "soldOut": false
+        },
+        {
+            "name": "Pasta Primavera",
+            "price": 10.99,
+            "description": "Pasta tossed with fresh vegetables in a light olive oil and garlic sauce.",
+            "soldOut": true
+        },
+        {
+            "name": "Lemon Herb Roast Chicken",
+            "price": 15.99,
+            "description": "Roast chicken seasoned with lemon and herbs, served with roasted potatoes.",
+            "soldOut": false
+        },
+        {
+            "name": "BBQ Ribs",
+            "price": 16.99,
+            "description": "Tender pork ribs smothered in tangy barbecue sauce, served with coleslaw and fries.",
+            "soldOut": true
+        },
+        {
+            "name": "Avocado Toast",
+            "price": 8.99,
+            "description": "Sliced avocado on toasted artisan bread, sprinkled with sea salt and red pepper flakes.",
+            "soldOut": false
+        },
+        {
+            "name": "Shrimp Cocktail",
+            "price": 12.99,
+            "description": "Chilled shrimp served with cocktail sauce and lemon wedges.",
+            "soldOut": true
+        },
+        {
+            "name": "Mediterranean Platter",
+            "price": 14.99,
+            "description": "A selection of hummus, tzatziki, falafel, and stuffed grape leaves, served with pita bread.",
+            "soldOut": false
+        },
+        {
+            "name": "Beef Pho",
+            "price": 13.99,
+            "description": "Vietnamese noodle soup with thinly sliced beef, rice noodles, and aromatic herbs.",
+            "soldOut": true
+        },
+        {
+            "name": "Vegetable Spring Rolls",
+            "price": 9.99,
+            "description": "Crispy fried spring rolls filled with mixed vegetables, served with sweet chili sauce.",
+            "soldOut": false
+        },
+        {
+            "name": "Chicken Satay",
+            "price": 11.99,
+            "description": "Grilled chicken skewers marinated in coconut milk and spices, served with peanut sauce.",
+            "soldOut": true
+        },
+        {
+            "name": "Ratatouille",
+            "price": 10.99,
+            "description": "A traditional French stewed vegetable dish made with eggplant, zucchini, bell peppers, and tomatoes.",
+            "soldOut": false
+        },
+        {
+            "name": "Tofu Stir Fry",
+            "price": 11.99,
+            "description": "Tofu and mixed vegetables stir-fried in a savory sauce, served over rice.",
+            "soldOut": true
+        },
+        {
+            "name": "Mango Tango Smoothie",
+            "price": 6.99,
+            "description": "A refreshing smoothie made with ripe mangoes, banana, yogurt, and orange juice.",
+            "soldOut": false
+        },
+        {
+            "name": "Beef Kebabs",
+            "price": 14.99,
+            "description": "Grilled beef skewers marinated in a blend of spices, served with grilled vegetables.",
+            "soldOut": true
+        },
+        {
+            "name": "Chocolate Lava Cake",
+            "price": 6.99,
+            "description": "Warm chocolate cake with a gooey chocolate center, served with vanilla ice cream.",
+            "soldOut": false
+        }
     ]
 }
 
