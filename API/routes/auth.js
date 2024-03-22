@@ -1,9 +1,7 @@
-// routes/auth.js
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
 
-// Example authentication route
 router.post("/login", async (req, res) => {
   // Extract username and password from request body
   const { username, password } = req.body;
