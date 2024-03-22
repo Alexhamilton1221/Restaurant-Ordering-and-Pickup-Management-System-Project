@@ -1,16 +1,12 @@
 ### Get all restaurants
-
-GET http://localhost:3000/restaurants
+GET http://localhost:4000/restaurants
 
 ### Get a restaurant
-
-GET http://localhost:3000/restaurants/65fb3b8b8520f755e67b654f
+GET http://localhost:4000/restaurants/65fb3b8b8520f755e67b654f
 
 ### Create restaurant
-
-POST http://localhost:3000/restaurants
+POST http://localhost:4000/restaurants
 Content-Type: application/json
-
 {
     "name": "Delicious Diner 2",
     "location": "123 Main St",
@@ -18,14 +14,11 @@ Content-Type: application/json
 }
 
 ### Delete restaurant
-
-DELETE http://localhost:3000/restaurants/65fb47a33e10088a7aee2212
+DELETE http://localhost:4000/restaurants/65fb47a33e10088a7aee2212
 
 ### Update restaurant
-
-PATCH http://localhost:3000/restaurants/65fb3b8b8520f755e67b654f
+PATCH http://localhost:4000/restaurants/65fb3b8b8520f755e67b654f
 Content-Type: application/json
-
 {
     "name": "New Dawn",
     "location": "456 Elm St new",
@@ -33,9 +26,8 @@ Content-Type: application/json
 }
 
 ### Add item to restaurant's menu
-POST http://localhost:3000/restaurants/65fb3b8b8520f755e67b654f/menu
+POST http://localhost:4000/restaurants/65fb3b8b8520f755e67b654f/menu
 Content-Type: application/json
-
 {
     "name": "Fries",
     "price": 2.99,
@@ -44,7 +36,7 @@ Content-Type: application/json
 }
 
 ### Delete item from restaurant's menu
-DELETE http://localhost:3000/restaurants/65fb3b8b8520f755e67b654f/menu/65fb47be3e10088a7aee221b
+DELETE http://localhost:4000/restaurants/65fb3b8b8520f755e67b654f/menu/65fb47be3e10088a7aee221b
 
 ### Get a item from a restaurant
-GET http://localhost:3000/restaurants/65fb3b8b8520f755e67b654f/menu/65fb481ac9889b94e5b9588c
+GET http://localhost:4000/restaurants/65fb3b8b8520f755e67b654f/menu/65fb481ac9889b94e5b9588c

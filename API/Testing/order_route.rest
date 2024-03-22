@@ -1,16 +1,12 @@
-### Get all orders
-
-GET http://localhost:3000/orders
+## Get all orders
+GET http://localhost:4000/orders
 
 ### Get an order
-
-GET http://localhost:3000/orders/65fb3b8b8520f755e67b654f
+GET http://localhost:4000/orders/65fb3b8b8520f755e67b654f
 
 ### Create order
-
-POST http://localhost:3000/orders
+POST http://localhost:4000/orders
 Content-Type: application/json
-
 {
     "userId": "65fa52e9fd40cf12697c3882",
     "restaurantId": "65fb3b8b8520f755e67b654f",
@@ -20,16 +16,12 @@ Content-Type: application/json
     ]
 }
 
-
 ### Delete order
-
-DELETE http://localhost:3000/orders/65fb54fa7dd8d9d6de172ac9
+DELETE http://localhost:4000/orders/65fb54fa7dd8d9d6de172ac9
 
 ### Update order
-
-PATCH http://localhost:3000/orders/65fb3b8b8520f755e67b654f
+PATCH http://localhost:4000/orders/65fb3b8b8520f755e67b654f
 Content-Type: application/json
-
 {
     "userId": "65fb3b8b8520f755e67b654f",
     "restaurantId": "65fb3b8b8520f755e67b654f",

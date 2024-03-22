@@ -1,32 +1,27 @@
 ### Get all users
-
-GET http://localhost:3000/users
+GET http://localhost:4000/users
 
 ### Get a user
-
-GET http://localhost:3000/users/65fa52e9fd40cf12697c3882
+GET http://localhost:4000/users/65fa52e9fd40cf12697c3882
 
 ### Create user
-
-POST http://localhost:3000/users
+POST http://localhost:4000/users
 Content-Type: application/json
 
 {
-    "name": "Sam",
+    "name": "TestCase",
     "age": 14,
-    "username": "joey123",
-    "password": "password123"
+    "username": "T",
+    "password": "T"
 }
 
-### Delete user
 
-DELETE http://localhost:3000/users/65fa7fca96a9e70b7f57e6e7
+### Delete user
+DELETE http://localhost:4000/users/65fa7fca96a9e70b7f57e6e7
 
 ### Update user
-
-PATCH http://localhost:3000/users/65fa52e9fd40cf12697c3882
+PATCH http://localhost:4000/users/65fa52e9fd40cf12697c3882
 Content-Type: application/json
-
 {
     "name": "Bob Ross",
     "age": 54,
