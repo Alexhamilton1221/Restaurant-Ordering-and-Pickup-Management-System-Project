@@ -32,16 +32,34 @@ router.get("/:id", getRestaurant, (req, res) => {
   res.json(res.restaurant);
 });
 
-// Creating a new restaurant
 router.post("/", async (req, res) => {
-  const restaurant = new Restaurant({
-    name: req.body.name,
-    location: req.body.location,
-    rating: req.body.rating,
-    // Add other restaurant attributes as needed
-  });
+  const { name, location, rating, menu } = req.body;
+
   try {
+    // Create the restaurant document
+    const restaurant = new Restaurant({ name, location, rating });
+
+    // Create an array to store the menu item IDs
+    const menuItemIds = [];
+
+    // Iterate over the menu items received in the request
+    for (const menuItemData of menu) {
+      // Create a new menu item document
+      const menuItem = new MenuItem(menuItemData);
+
+      // Save the menu item to the database
+      await menuItem.save();
+
+      // Push the ID of the newly created menu item to the array
+      menuItemIds.push(menuItem._id);
+    }
+
+    // Assign the array of menu item IDs to the restaurant's menu property
+    restaurant.menu = menuItemIds;
+
+    // Save the restaurant document
     const newRestaurant = await restaurant.save();
+
     res.status(201).json(newRestaurant);
   } catch (err) {
     res.status(400).json({ message: err.message });

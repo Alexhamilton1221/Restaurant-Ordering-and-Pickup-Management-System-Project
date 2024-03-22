@@ -7,28 +7,25 @@ const Homepage = () => {
   const [restaurants, setRestaurants] = useState([]);
 
   useEffect(() => {
-    // Fetch user name from the backend API
-    const fetchUserName = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/users/name");
-        setUserFullName(response.data.name);
+        // Fetch user name from the backend API
+        const userResponse = await axios.get(
+          "http://localhost:4000/users/name"
+        );
+        setUserFullName(userResponse.data.name);
+
+        // Fetch restaurant data from the backend API
+        const restaurantsResponse = await axios.get(
+          "http://localhost:4000/restaurants"
+        );
+        setRestaurants(restaurantsResponse.data);
       } catch (error) {
-        console.error("Error fetching user name:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    // Fetch restaurant data from the backend API
-    const fetchRestaurants = async () => {
-      try {
-        const response = await axios.get("http://localhost:4000/restaurants");
-        setRestaurants(response.data);
-      } catch (error) {
-        console.error("Error fetching restaurants:", error);
-      }
-    };
-
-    fetchUserName();
-    fetchRestaurants();
+    fetchData();
   }, []);
 
   const handleRestaurantClick = (restaurant) => {
@@ -38,7 +35,7 @@ const Homepage = () => {
 
   return (
     <div className="homepage">
-      <h1>Welcome to MealMate, {userFullName}!</h1>
+      <h1>Welcome to MealMate!</h1>
       <div className="restaurant-list">
         {restaurants.map((restaurant) => (
           <div
@@ -49,6 +46,15 @@ const Homepage = () => {
             <h3>{restaurant.name}</h3>
             <p>{restaurant.location}</p>
             <p>Rating: {restaurant.rating}</p>
+            {/* Display menu items */}
+            <h4>Menu:</h4>
+            <ul>
+              {restaurant.menu.map((menuItem) => (
+                <li key={menuItem._id}>
+                  {menuItem.name} - ${menuItem.price}
+                </li>
+              ))}
+            </ul>
           </div>
         ))}
       </div>
