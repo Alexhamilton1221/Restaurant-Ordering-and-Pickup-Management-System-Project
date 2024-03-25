@@ -7,29 +7,22 @@ router.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    // Find user by username in the database
-    const user = await User.findOne({ username });
+    // Find user by username and password in the database
+    const user = await User.findOne({ username, password });
 
     if (!user) {
-      // User not found, return error response
-      console.log("User not found");
+      // User not found or password incorrect, return error response
+      console.log("Invalid credentials");
       return res.status(401).json({ message: "Invalid username or password" });
     }
 
-    // Compare the provided password with the stored password directly
-    if (user.password !== password) {
-      // Password incorrect, return error response
-      console.log("Invalid password");
-      return res.status(401).json({ message: "Invalid username or password" });
-    }
-
-    // Authentication successful, return success response
+    // Authentication successful, return success response with user object
     console.log(`Welcome ${user.name}`);
-    res.status(200).json({ message: "Login successful" });
+    return res.status(200).json({ message: "Login successful", user }); // Return user object
   } catch (error) {
     // Handle any errors that occur during authentication
     console.error("Authentication error:", error);
-    res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 });
 

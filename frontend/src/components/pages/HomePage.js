@@ -9,11 +9,12 @@ const Homepage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch user name from the backend API
-        const userResponse = await axios.get(
-          "http://localhost:4000/users/name"
-        );
-        setUserFullName(userResponse.data.name);
+        // Fetch user object from local storage
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+          const user = JSON.parse(storedUser);
+          setUserFullName(user.name); // Set user's full name
+        }
 
         // Fetch restaurant data from the backend API
         const restaurantsResponse = await axios.get(
@@ -35,7 +36,9 @@ const Homepage = () => {
 
   return (
     <div className="homepage">
-      <h1>Welcome to MealMate!</h1>
+      <h1>Welcome to MealMate, {userFullName}!</h1>
+      <h2>Choose a restaurant to order from:</h2>
+
       <div className="restaurant-list">
         {restaurants.map((restaurant) => (
           <div

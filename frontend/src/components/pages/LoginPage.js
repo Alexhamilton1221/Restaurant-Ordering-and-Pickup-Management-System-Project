@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
   const navigate = useNavigate(); // Use useNavigate hook to navigate
 
   const handleSubmit = async (event) => {
@@ -17,8 +16,10 @@ const Login = () => {
         password,
       });
 
+      // Store user information in local storage
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+
       console.log("Login successful:", response.data);
-      // Redirect to homepage upon successful login
 
       navigate("/homepage");
     } catch (error) {
