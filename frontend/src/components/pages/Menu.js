@@ -8,6 +8,7 @@ const Menu = () => {
   const [cartItems, setCartItems] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [quantity, setQuantity] = useState(1); // Default quantity is 1
 
   useEffect(() => {
     const fetchRestaurantAndMenu = async () => {
@@ -28,20 +29,23 @@ const Menu = () => {
     fetchRestaurantAndMenu();
   }, []);
 
-  const addToCart = (menuItem) => {
-    if (!menuItem.soldOut) {
-      console.log("Added item to cart:", menuItem);
-      setCartItems([...cartItems, menuItem]);
-    } else {
-      console.log("Cannot add sold-out item to cart:", menuItem);
-      setSelectedItem(menuItem);
-      setShowPopup(true);
-    }
+  const openPopup = (menuItem) => {
+    setShowPopup(true);
+    setSelectedItem(menuItem);
   };
 
   const closePopup = () => {
     setShowPopup(false);
     setSelectedItem(null);
+    setQuantity(1); // Reset quantity to 1 when closing the popup
+  };
+
+  const addToCart = () => {
+    if (selectedItem) {
+      const newItem = { ...selectedItem, quantity };
+      setCartItems([...cartItems, newItem]);
+      closePopup(); // Close the popup after adding item to the cart
+    }
   };
 
   return (
@@ -58,7 +62,7 @@ const Menu = () => {
                   className={`menu-item-block ${
                     menuItem.soldOut ? "sold-out" : ""
                   }`}
-                  onClick={() => addToCart(menuItem)}
+                  onClick={() => openPopup(menuItem)}
                 >
                   <h3>{menuItem.name}</h3>
                   <p>Price: ${menuItem.price}</p>
@@ -75,9 +79,25 @@ const Menu = () => {
       {showPopup && (
         <div className="popup">
           <div className="popup-content">
-            <h2>Menu Popup</h2>
-            <p>This item is sold out:</p>
-            <p>{selectedItem && selectedItem.name}</p>
+            <h2>Add to Cart</h2>
+            {selectedItem && (
+              <>
+                <p>{selectedItem.name}</p>
+                {selectedItem.soldOut ? (
+                  <p className="sold-out-warning">This item is sold out</p>
+                ) : (
+                  <>
+                    <input
+                      type="number"
+                      value={quantity}
+                      onChange={(e) => setQuantity(e.target.value)}
+                      min="1" // Minimum quantity is 1
+                    />
+                    <button onClick={addToCart}>Add</button>
+                  </>
+                )}
+              </>
+            )}
             <button onClick={closePopup}>Close</button>
           </div>
         </div>
@@ -88,7 +108,9 @@ const Menu = () => {
         <div className="cart-items">
           {cartItems.map((item, index) => (
             <div key={index}>
-              <p>{item.name}</p>
+              <p>
+                {item.name} (Quantity: {item.quantity})
+              </p>
               <p>Price: ${item.price}</p>
             </div>
           ))}
