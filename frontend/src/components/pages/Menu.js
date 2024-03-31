@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "../styles/Menu.css";
 
 const Menu = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [restaurant, setRestaurant] = useState(null);
+  const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
     const fetchRestaurantAndMenu = async () => {
@@ -24,24 +26,54 @@ const Menu = () => {
     fetchRestaurantAndMenu();
   }, []);
 
+  const addToCart = (menuItem) => {
+    if (!menuItem.soldOut) {
+      console.log("Added item to cart:", menuItem);
+      setCartItems([...cartItems, menuItem]);
+    } else {
+      console.log("Cannot add sold-out item to cart:", menuItem);
+    }
+  };
+
   return (
     <div className="menu-page">
-      {restaurant ? (
-        <>
-          <h1>{restaurant.name} Menu</h1>
-          <ul>
-            {menuItems.map((menuItem) => (
-              <li key={menuItem._id}>
-                <h3>{menuItem.name}</h3>
-                <p>Price: ${menuItem.price}</p>
-                {menuItem.soldOut && <span>(Sold Out)</span>}
-              </li>
-            ))}
-          </ul>
-        </>
-      ) : (
-        <p>Loading...</p>
-      )}
+      <div className="menu-container">
+        {restaurant ? (
+          <>
+            <h1>{restaurant.name} Menu</h1>
+            <h2>Click items to add to cart</h2>
+            <div className="menu-items-container">
+              {menuItems.map((menuItem) => (
+                <div
+                  key={menuItem._id}
+                  className={`menu-item-block ${
+                    menuItem.soldOut ? "sold-out" : ""
+                  }`}
+                  onClick={() => addToCart(menuItem)}
+                >
+                  <h3>{menuItem.name}</h3>
+                  <p>Price: ${menuItem.price}</p>
+                  {menuItem.soldOut && <span>(Sold Out)</span>}
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <p>Loading...</p>
+        )}
+      </div>
+
+      <div className="cart-panel">
+        <h2>Cart</h2>
+        <div className="cart-items">
+          {cartItems.map((item, index) => (
+            <div key={index}>
+              <p>{item.name}</p>
+              <p>Price: ${item.price}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

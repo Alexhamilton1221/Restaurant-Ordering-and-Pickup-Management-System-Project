@@ -1,0 +1,47 @@
+.menu-item-block {
+  padding: 10px; /* Adjust padding as needed */
+  border: 1px solid #7e7373;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #f5f5f5;
+  width: 500px; /* Set the width of the menu item boxes */
+  margin: 0 auto 10px; /* Center align and add bottom margin for spacing */
+}
+
+.menu-item-block:hover {
+  background-color: rgb(146, 235, 149); /* Change background color on hover */
+}
+
+.menu-item-block.sold-out {
+  background-color: #d1bcbc; /* Set background color for sold-out items */
+}
+.menu-container {
+  text-align: center; /* Center align text */
+}
+
+.cart-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 250px;
+  height: 100%;
+  background-color: #f5f5f5;
+  border-left: 1px solid #ddd;
+  padding: 20px;
+}
+
+.cart-panel h2 {
+  margin-top: 0;
+}
+
+.cart-items {
+  margin-top: 20px;
+}
+
+.cart-items > div {
+  margin-bottom: 10px;
+}
+
+.menu-container {
+  text-align: center; /* Center align text */
+}

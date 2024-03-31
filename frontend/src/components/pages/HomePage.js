@@ -64,10 +64,10 @@ const HomePage = () => {
           </div>
         ))}
       </div>
-      {clickedRestaurantId && (
+      {/* {clickedRestaurantId && (
         <p>Clicked Restaurant ID: {clickedRestaurantId}</p>
       )}{" "}
-      // Display clicked restaurant ID
+      // Display clicked restaurant ID */}
     </div>
   );
 };
