@@ -6,6 +6,8 @@ const Menu = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [restaurant, setRestaurant] = useState(null);
   const [cartItems, setCartItems] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
     const fetchRestaurantAndMenu = async () => {
@@ -32,7 +34,14 @@ const Menu = () => {
       setCartItems([...cartItems, menuItem]);
     } else {
       console.log("Cannot add sold-out item to cart:", menuItem);
+      setSelectedItem(menuItem);
+      setShowPopup(true);
     }
+  };
+
+  const closePopup = () => {
+    setShowPopup(false);
+    setSelectedItem(null);
   };
 
   return (
@@ -62,6 +71,17 @@ const Menu = () => {
           <p>Loading...</p>
         )}
       </div>
+
+      {showPopup && (
+        <div className="popup">
+          <div className="popup-content">
+            <h2>Menu Popup</h2>
+            <p>This item is sold out:</p>
+            <p>{selectedItem && selectedItem.name}</p>
+            <button onClick={closePopup}>Close</button>
+          </div>
+        </div>
+      )}
 
       <div className="cart-panel">
         <h2>Cart</h2>
