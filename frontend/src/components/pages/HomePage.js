@@ -52,15 +52,6 @@ const HomePage = () => {
             <h3>{restaurant.name}</h3>
             <p>{restaurant.location}</p>
             <p>Rating: {restaurant.rating}</p>
-            <h4>Menu:</h4>
-            <ul>
-              {restaurant.menu.map((menuItem) => (
-                <li key={menuItem._id}>
-                  {menuItem.name} - ${menuItem.price}{" "}
-                  {menuItem.soldOut && <span>(Sold Out)</span>}
-                </li>
-              ))}
-            </ul>
           </div>
         ))}
       </div>
