@@ -40,11 +40,49 @@ const Menu = () => {
     setQuantity(1); // Reset quantity to 1 when closing the popup
   };
 
-  const addToCart = () => {
-    if (selectedItem) {
-      const newItem = { ...selectedItem, quantity };
-      setCartItems([...cartItems, newItem]);
-      closePopup(); // Close the popup after adding item to the cart
+  const addToCart = (menuItem) => {
+    if (menuItem.soldOut) {
+      openPopup(menuItem); // Open popup for sold-out items
+    } else {
+      const existingItemIndex = cartItems.findIndex(
+        (item) => item._id === menuItem._id
+      );
+      if (existingItemIndex !== -1) {
+        const updatedCartItems = [...cartItems];
+        updatedCartItems[existingItemIndex].quantity++;
+        setCartItems(updatedCartItems);
+      } else {
+        setCartItems([...cartItems, { ...menuItem, quantity: 1 }]);
+      }
+    }
+  };
+
+  const removeFromCart = (itemId) => {
+    const updatedCartItems = cartItems.filter((item) => item._id !== itemId);
+    setCartItems(updatedCartItems);
+  };
+
+  const decrementQuantity = (itemId) => {
+    const existingItemIndex = cartItems.findIndex(
+      (item) => item._id === itemId
+    );
+    if (existingItemIndex !== -1) {
+      const updatedCartItems = [...cartItems];
+      if (updatedCartItems[existingItemIndex].quantity > 1) {
+        updatedCartItems[existingItemIndex].quantity--;
+        setCartItems(updatedCartItems);
+      }
+    }
+  };
+
+  const incrementQuantity = (itemId) => {
+    const existingItemIndex = cartItems.findIndex(
+      (item) => item._id === itemId
+    );
+    if (existingItemIndex !== -1) {
+      const updatedCartItems = [...cartItems];
+      updatedCartItems[existingItemIndex].quantity++;
+      setCartItems(updatedCartItems);
     }
   };
 
@@ -62,7 +100,7 @@ const Menu = () => {
                   className={`menu-item-block ${
                     menuItem.soldOut ? "sold-out" : ""
                   }`}
-                  onClick={() => openPopup(menuItem)}
+                  onClick={() => addToCart(menuItem)}
                 >
                   <h3>{menuItem.name}</h3>
                   <p>Price: ${menuItem.price}</p>
@@ -83,22 +121,10 @@ const Menu = () => {
             {selectedItem && (
               <>
                 <p>{selectedItem.name}</p>
-                {selectedItem.soldOut ? (
-                  <p className="sold-out-warning">This item is sold out</p>
-                ) : (
-                  <>
-                    <input
-                      type="number"
-                      value={quantity}
-                      onChange={(e) => setQuantity(e.target.value)}
-                      min="1" // Minimum quantity is 1
-                    />
-                    <button onClick={addToCart}>Add</button>
-                  </>
-                )}
+                <p className="sold-out-warning">This item is sold out</p>
+                <button onClick={closePopup}>Close</button>
               </>
             )}
-            <button onClick={closePopup}>Close</button>
           </div>
         </div>
       )}
@@ -106,12 +132,16 @@ const Menu = () => {
       <div className="cart-panel">
         <h2>Cart</h2>
         <div className="cart-items">
-          {cartItems.map((item, index) => (
-            <div key={index}>
-              <p>
-                {item.name} (Quantity: {item.quantity})
-              </p>
+          {cartItems.map((item) => (
+            <div key={item._id}>
+              <p>{item.name}</p>
               <p>Price: ${item.price}</p>
+              <div>
+                <button onClick={() => decrementQuantity(item._id)}>-</button>
+                <span>{item.quantity}</span>
+                <button onClick={() => incrementQuantity(item._id)}>+</button>
+              </div>
+              <button onClick={() => removeFromCart(item._id)}>Remove</button>
             </div>
           ))}
         </div>
