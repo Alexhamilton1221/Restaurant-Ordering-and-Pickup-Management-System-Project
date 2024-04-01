@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../styles/Menu.css";
+import { useNavigate } from "react-router-dom";
 
 const Menu = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [restaurant, setRestaurant] = useState(null);
   const [cartItems, setCartItems] = useState([]);
-  const [showPopup, setShowPopup] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
   const [quantity, setQuantity] = useState(1); // Default quantity is 1
 
   useEffect(() => {
@@ -29,20 +28,9 @@ const Menu = () => {
     fetchRestaurantAndMenu();
   }, []);
 
-  const openPopup = (menuItem) => {
-    setShowPopup(true);
-    setSelectedItem(menuItem);
-  };
-
-  const closePopup = () => {
-    setShowPopup(false);
-    setSelectedItem(null);
-    setQuantity(1); // Reset quantity to 1 when closing the popup
-  };
-
   const addToCart = (menuItem) => {
     if (menuItem.soldOut) {
-      openPopup(menuItem); // Open popup for sold-out items
+      alert("This item is sold out."); // Alert for sold-out items
     } else {
       const existingItemIndex = cartItems.findIndex(
         (item) => item._id === menuItem._id
@@ -86,6 +74,25 @@ const Menu = () => {
     }
   };
 
+  // Calculate total sum of items in the cart and round to two decimal places
+  const cartTotal = cartItems
+    .reduce((total, item) => total + item.price * item.quantity, 0)
+    .toFixed(2);
+
+  const navigate = useNavigate();
+
+  const proceedToCheckout = () => {
+    if (parseFloat(cartTotal) === 0) {
+      alert(
+        "Your cart is empty. Please add items before proceeding to checkout."
+      );
+    } else {
+      alert("Order placed!");
+      setCartItems([]); // Empty the cart after placing the order
+      navigate("/Homepage");
+    }
+  };
+
   return (
     <div className="menu-page">
       <div className="menu-container">
@@ -114,21 +121,6 @@ const Menu = () => {
         )}
       </div>
 
-      {showPopup && (
-        <div className="popup">
-          <div className="popup-content">
-            <h2>Add to Cart</h2>
-            {selectedItem && (
-              <>
-                <p>{selectedItem.name}</p>
-                <p className="sold-out-warning">This item is sold out</p>
-                <button onClick={closePopup}>Close</button>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-
       <div className="cart-panel">
         <h2>Cart</h2>
         <div className="cart-items">
@@ -145,6 +137,10 @@ const Menu = () => {
             </div>
           ))}
         </div>
+        {/* Display total sum of items in the cart */}
+        <p>Total: ${cartTotal}</p>
+        {/* Button to proceed to checkout */}
+        <button onClick={proceedToCheckout}>Place Order</button>
       </div>
     </div>
   );
