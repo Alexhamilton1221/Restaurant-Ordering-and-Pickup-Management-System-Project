@@ -6,7 +6,6 @@ import "../styles/HomePage.css";
 const HomePage = () => {
   const [userFullName, setUserFullName] = useState("");
   const [restaurants, setRestaurants] = useState([]);
-  const [clickedRestaurantId, setClickedRestaurantId] = useState(null); // State variable to hold clicked restaurant ID
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,8 +13,10 @@ const HomePage = () => {
       try {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
-          const user = JSON.parse(storedUser);
+          const user = JSON.parse(storedUser); // Define the 'user' variable here
           setUserFullName(user.name);
+          const userId = user._id; // Extract user ID from stored user object
+          // Now pass the user ID to the handleRestaurantClick function
         }
 
         const restaurantsResponse = await axios.get(
@@ -30,12 +31,11 @@ const HomePage = () => {
     fetchData();
   }, []);
 
-  const handleRestaurantClick = (restaurantId) => {
+  const handleRestaurantClick = (restaurantId, userId) => {
     // Handle click on restaurant block
     console.log("Clicked on restaurant:", restaurantId);
-    setClickedRestaurantId(restaurantId); // Set the clicked restaurant ID
     localStorage.setItem("selectedRestaurantId", restaurantId); // Store the selected restaurant ID
-    navigate(`/menu`); // Navigate to '/menu'
+    navigate(`/menu`, { state: { userId: userId } }); // Navigate to '/menu' with user ID
   };
 
   return (
@@ -47,7 +47,9 @@ const HomePage = () => {
           <div
             key={restaurant._id}
             className="restaurant-block"
-            onClick={() => handleRestaurantClick(restaurant._id)} // Pass restaurant ID to the function
+            onClick={() =>
+              handleRestaurantClick(restaurant._id /* Pass user ID here */)
+            } // Pass user ID to the function
           >
             <h3>{restaurant.name}</h3>
             <p>{restaurant.location}</p>
@@ -55,10 +57,6 @@ const HomePage = () => {
           </div>
         ))}
       </div>
-      {/* {clickedRestaurantId && (
-        <p>Clicked Restaurant ID: {clickedRestaurantId}</p>
-      )}{" "}
-      // Display clicked restaurant ID */}
     </div>
   );
 };

@@ -8,6 +8,7 @@ const Menu = () => {
   const [restaurant, setRestaurant] = useState(null);
   const [cartItems, setCartItems] = useState([]);
   const [quantity, setQuantity] = useState(1); // Default quantity is 1
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRestaurantAndMenu = async () => {
@@ -79,15 +80,20 @@ const Menu = () => {
     .reduce((total, item) => total + item.price * item.quantity, 0)
     .toFixed(2);
 
-  const navigate = useNavigate();
-
   const proceedToCheckout = () => {
     if (parseFloat(cartTotal) === 0) {
       alert(
         "Your cart is empty. Please add items before proceeding to checkout."
       );
     } else {
-      alert("Order placed!");
+      const storedUser = localStorage.getItem("user");
+      const user = storedUser ? JSON.parse(storedUser) : null;
+      const userId = user ? user._id : "No user ID found"; // Get user ID or set default message
+      const storedRestaurantId = localStorage.getItem("selectedRestaurantId");
+      const restaurantId = storedRestaurantId
+        ? storedRestaurantId
+        : "No restaurant ID found"; // Get restaurant ID or set default message
+      alert(`Order placed! User ID: ${userId}, Restaurant ID: ${restaurantId}`);
       setCartItems([]); // Empty the cart after placing the order
       navigate("/Homepage");
     }
