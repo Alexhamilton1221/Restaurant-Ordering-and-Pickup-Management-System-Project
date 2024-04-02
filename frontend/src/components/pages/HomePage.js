@@ -7,6 +7,7 @@ const HomePage = () => {
   const [userFullName, setUserFullName] = useState("");
   const [restaurants, setRestaurants] = useState([]);
   const [showRestaurants, setShowRestaurants] = useState(true);
+  const [userOrders, setUserOrders] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,6 +17,12 @@ const HomePage = () => {
         if (storedUser) {
           const user = JSON.parse(storedUser);
           setUserFullName(user.name);
+          // Fetch orders for the current user
+          const ordersResponse = await axios.get(
+            `http://localhost:4000/orders/user/${user.name}`
+          );
+
+          setUserOrders(ordersResponse.data);
         }
 
         const restaurantsResponse = await axios.get(
@@ -37,13 +44,18 @@ const HomePage = () => {
 
   const handleOrdersButtonClick = () => {
     setShowRestaurants(false);
-    // Add any additional logic here if needed
+    console.log("Orders button clicked, showRestaurants:", showRestaurants);
   };
 
   const handleRestaurantsButtonClick = () => {
     setShowRestaurants(true);
-    // Add any additional logic here if needed
+    console.log(
+      "Restaurants button clicked, showRestaurants:",
+      showRestaurants
+    );
   };
+
+  console.log("Rendering with showRestaurants:", showRestaurants);
 
   return (
     <div className="homepage">
@@ -55,7 +67,7 @@ const HomePage = () => {
         </div>
       </div>
       {showRestaurants ? (
-        <>
+        <div>
           <h2>Choose a restaurant to order from:</h2>
           <div className="restaurant-list">
             {restaurants.map((restaurant) => (
@@ -70,9 +82,27 @@ const HomePage = () => {
               </div>
             ))}
           </div>
-        </>
+        </div>
       ) : (
-        <h2>Your Orders</h2>
+        <div>
+          <h2>Your Orders</h2>
+          <ul>
+            {userOrders.map((order) => (
+              <li key={order._id}>
+                <p>Order ID: {order._id}</p>
+                <p>Total Price: ${order.totalPrice}</p>
+                <ul>
+                  {order.items.map((item) => (
+                    <li key={item._id}>
+                      {item.menuItem} - Quantity: {item.quantity}, Cost: $
+                      {item.quantity * item.price}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </div>
   );
