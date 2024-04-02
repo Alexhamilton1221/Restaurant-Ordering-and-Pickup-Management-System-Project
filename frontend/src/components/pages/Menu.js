@@ -91,18 +91,21 @@ const Menu = () => {
       const storedRestaurantId = localStorage.getItem("selectedRestaurantId");
       if (userId && storedRestaurantId) {
         const orderItems = cartItems.map((item) => ({
-          menuItem: item.name, // Store menu item name instead of ID
+          menuItem: item.name,
           quantity: item.quantity,
-          cost: item.price * item.quantity, // Calculate and include the cost for each item
+          cost: item.price * item.quantity,
         }));
 
+        // Convert pickupTime to ISO format
+        const isoPickupTime = pickupTime.toISOString();
+
         const orderData = {
-          user: user.name, // Store user name instead of ID
-          restaurant: restaurant.name, // Store restaurant name instead of ID
+          user: user.name,
+          restaurant: restaurant.name,
           items: orderItems,
-          totalPrice: parseFloat(cartTotal), // Convert totalPrice to float
+          totalPrice: parseFloat(cartTotal),
           status: "placed",
-          pickupTime: pickupTime, // Include the selected pickup time
+          pickupTime: isoPickupTime,
         };
 
         const response = await axios.post(

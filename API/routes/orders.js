@@ -44,7 +44,7 @@ router.get("/:id", getOrder, (req, res) => {
   res.json(res.order);
 });
 
-// Creating a new order
+/// Creating a new order
 router.post("/", async (req, res) => {
   const { user, restaurant, items, totalPrice, pickupTime } = req.body; // Extract user, restaurant, items, totalPrice, and pickupTime from req.body
 
@@ -52,13 +52,18 @@ router.post("/", async (req, res) => {
     // Convert pickupTime to MST
     const mstPickupTime = moment.tz(pickupTime, "America/Denver").toDate();
 
+    // Subtract 6 hours from the pickupTime to adjust for the forward shift
+    const adjustedPickupTime = moment(mstPickupTime)
+      .subtract(6, "hours")
+      .toDate();
+
     // Create the order
     const newOrder = new Order({
       user,
       restaurant,
       items,
       totalPrice,
-      pickupTime: mstPickupTime, // Add pickupTime to the order
+      pickupTime: adjustedPickupTime, // Adjusted pickupTime
       status: "placed",
     });
 
