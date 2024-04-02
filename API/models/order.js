@@ -1,5 +1,3 @@
-// order.model.js
-
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
@@ -19,6 +17,10 @@ const orderSchema = new mongoose.Schema({
       },
       quantity: {
         type: Number,
+        required: true,
+      },
+      cost: {
+        type: Number, // Adding cost field for each item
         required: true,
       },
     },

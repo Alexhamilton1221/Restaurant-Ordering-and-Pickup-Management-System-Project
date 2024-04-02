@@ -55,6 +55,18 @@ const HomePage = () => {
     );
   };
 
+  const getMenuPrice = (menuItemName) => {
+    const menuItem = restaurants.find((restaurant) =>
+      restaurant.menu.find((item) => item.name === menuItemName)
+    );
+    if (menuItem) {
+      const item = menuItem.menu.find((item) => item.name === menuItemName);
+      return item.price;
+    } else {
+      return 0;
+    }
+  };
+
   console.log("Rendering with showRestaurants:", showRestaurants);
 
   return (
@@ -89,16 +101,18 @@ const HomePage = () => {
           <ul>
             {userOrders.map((order) => (
               <li key={order._id}>
+                <p>Order From: {order.restaurant}</p>
                 <p>Order ID: {order._id}</p>
-                <p>Total Price: ${order.totalPrice}</p>
+
                 <ul>
                   {order.items.map((item) => (
                     <li key={item._id}>
                       {item.menuItem} - Quantity: {item.quantity}, Cost: $
-                      {item.quantity * item.price}
+                      {item.quantity * getMenuPrice(item.menuItem)}
                     </li>
                   ))}
                 </ul>
+                <p>Total Price: ${order.totalPrice}</p>
               </li>
             ))}
           </ul>

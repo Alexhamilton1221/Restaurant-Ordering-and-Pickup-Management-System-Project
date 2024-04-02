@@ -90,6 +90,7 @@ const Menu = () => {
         const orderItems = cartItems.map((item) => ({
           menuItem: item.name, // Store menu item name instead of ID
           quantity: item.quantity,
+          cost: item.price * item.quantity, // Calculate and include the cost for each item
         }));
 
         const orderData = {
@@ -99,9 +100,6 @@ const Menu = () => {
           totalPrice: parseFloat(cartTotal), // Convert totalPrice to float
           status: "placed",
         };
-
-        // alert(`Order Data: ${JSON.stringify(orderData)}`); // Alert the orderData
-        // alert(`Order Data: ${JSON.stringify(orderData)}`); // Alert the orderData
 
         const response = await axios.post(
           "http://localhost:4000/orders",
