@@ -100,7 +100,8 @@ const Menu = () => {
           status: "placed",
         };
 
-        alert(`Order Data: ${JSON.stringify(orderData)}`); // Alert the orderData
+        // alert(`Order Data: ${JSON.stringify(orderData)}`); // Alert the orderData
+        // alert(`Order Data: ${JSON.stringify(orderData)}`); // Alert the orderData
 
         const response = await axios.post(
           "http://localhost:4000/orders",
@@ -126,7 +127,7 @@ const Menu = () => {
       const restaurantId = storedRestaurantId
         ? storedRestaurantId
         : "No restaurant ID found"; // Get restaurant ID or set default message
-      alert(`Order placed! User ID: ${userId}, Restaurant ID: ${restaurantId}`);
+      alert(`Order placed!`);
       setCartItems([]); // Empty the cart after placing the order
       navigate("/HomePage");
 

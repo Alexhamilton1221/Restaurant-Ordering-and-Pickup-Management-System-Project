@@ -6,6 +6,7 @@ import "../styles/HomePage.css";
 const HomePage = () => {
   const [userFullName, setUserFullName] = useState("");
   const [restaurants, setRestaurants] = useState([]);
+  const [showRestaurants, setShowRestaurants] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -13,10 +14,8 @@ const HomePage = () => {
       try {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
-          const user = JSON.parse(storedUser); // Define the 'user' variable here
+          const user = JSON.parse(storedUser);
           setUserFullName(user.name);
-          const userId = user._id; // Extract user ID from stored user object
-          // Now pass the user ID to the handleRestaurantClick function
         }
 
         const restaurantsResponse = await axios.get(
@@ -31,32 +30,50 @@ const HomePage = () => {
     fetchData();
   }, []);
 
-  const handleRestaurantClick = (restaurantId, userId) => {
-    // Handle click on restaurant block
-    console.log("Clicked on restaurant:", restaurantId);
-    localStorage.setItem("selectedRestaurantId", restaurantId); // Store the selected restaurant ID
-    navigate(`/menu`, { state: { userId: userId } }); // Navigate to '/menu' with user ID
+  const handleRestaurantClick = (restaurantId) => {
+    localStorage.setItem("selectedRestaurantId", restaurantId);
+    navigate(`/menu`);
+  };
+
+  const handleOrdersButtonClick = () => {
+    setShowRestaurants(false);
+    // Add any additional logic here if needed
+  };
+
+  const handleRestaurantsButtonClick = () => {
+    setShowRestaurants(true);
+    // Add any additional logic here if needed
   };
 
   return (
     <div className="homepage">
-      <h1>Welcome to MealMate, {userFullName}!</h1>
-      <h2>Choose a restaurant to order from:</h2>
-      <div className="restaurant-list">
-        {restaurants.map((restaurant) => (
-          <div
-            key={restaurant._id}
-            className="restaurant-block"
-            onClick={() =>
-              handleRestaurantClick(restaurant._id /* Pass user ID here */)
-            } // Pass user ID to the function
-          >
-            <h3>{restaurant.name}</h3>
-            <p>{restaurant.location}</p>
-            <p>Rating: {restaurant.rating}</p>
-          </div>
-        ))}
+      <div className="homepage-header">
+        <h1>Welcome to MealMate, {userFullName}!</h1>
+        <div className="homepage-buttons">
+          <button onClick={handleRestaurantsButtonClick}>Restaurants</button>
+          <button onClick={handleOrdersButtonClick}>Orders</button>
+        </div>
       </div>
+      {showRestaurants ? (
+        <>
+          <h2>Choose a restaurant to order from:</h2>
+          <div className="restaurant-list">
+            {restaurants.map((restaurant) => (
+              <div
+                key={restaurant._id}
+                className="restaurant-block"
+                onClick={() => handleRestaurantClick(restaurant._id)}
+              >
+                <h3>{restaurant.name}</h3>
+                <p>{restaurant.location}</p>
+                <p>Rating: {restaurant.rating}</p>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <h2>Your Orders</h2>
+      )}
     </div>
   );
 };
