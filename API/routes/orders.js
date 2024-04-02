@@ -1,8 +1,7 @@
-// orders.js
-
 const express = require("express");
 const router = express.Router();
 const Order = require("../models/order");
+const moment = require("moment-timezone"); // Import Moment.js with time zone support
 
 // Middleware to get a single order by ID
 async function getOrder(req, res, next) {
@@ -47,15 +46,19 @@ router.get("/:id", getOrder, (req, res) => {
 
 // Creating a new order
 router.post("/", async (req, res) => {
-  const { user, restaurant, items, totalPrice } = req.body; // Extract user, restaurant, items, totalPrice from req.body
+  const { user, restaurant, items, totalPrice, pickupTime } = req.body; // Extract user, restaurant, items, totalPrice, and pickupTime from req.body
 
   try {
+    // Convert pickupTime to MST
+    const mstPickupTime = moment.tz(pickupTime, "America/Denver").toDate();
+
     // Create the order
     const newOrder = new Order({
       user,
       restaurant,
       items,
       totalPrice,
+      pickupTime: mstPickupTime, // Add pickupTime to the order
       status: "placed",
     });
 
@@ -73,13 +76,17 @@ router.post("/", async (req, res) => {
 // Updating an order by ID
 router.patch("/:id", getOrder, async (req, res) => {
   try {
-    const { user, restaurant, items, totalPrice } = req.body;
+    const { user, restaurant, items, totalPrice, pickupTime } = req.body;
+
+    // Convert pickupTime to MST
+    const mstPickupTime = moment.tz(pickupTime, "America/Denver").toDate();
 
     // Update the order with the new information
     res.order.user = user;
     res.order.restaurant = restaurant;
     res.order.items = items;
     res.order.totalPrice = totalPrice;
+    res.order.pickupTime = mstPickupTime; // Update pickupTime
 
     // Save the updated order
     const updatedOrder = await res.order.save();

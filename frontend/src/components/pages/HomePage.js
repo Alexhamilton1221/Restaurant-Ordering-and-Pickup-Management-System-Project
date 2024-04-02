@@ -101,7 +101,7 @@ const HomePage = () => {
           <ul>
             {userOrders.map((order) => (
               <li key={order._id}>
-                <p>Order From: {order.restaurant}</p>
+                <p>Restaurant Name: {order.restaurant}</p>
                 <p>Order ID: {order._id}</p>
 
                 <ul>
@@ -113,6 +113,7 @@ const HomePage = () => {
                   ))}
                 </ul>
                 <p>Total Price: ${order.totalPrice}</p>
+                <p>Order Status: {order.status}</p>
               </li>
             ))}
           </ul>

@@ -34,6 +34,10 @@ const orderSchema = new mongoose.Schema({
     enum: ["placed", "processing", "completed"],
     default: "placed",
   },
+  pickupTime: {
+    type: Date, // Assuming pickup time is a Date object
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("Order", orderSchema);

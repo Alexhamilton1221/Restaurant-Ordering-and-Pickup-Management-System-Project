@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../styles/Menu.css";
 import { useNavigate } from "react-router-dom";
+// import DateTimePicker from "react-datetime-picker";
+import Datepicker from "../Datepicker";
 
 const Menu = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [restaurant, setRestaurant] = useState(null);
   const [cartItems, setCartItems] = useState([]);
   const [quantity, setQuantity] = useState(1); // Default quantity is 1
+  const [pickupTime, setPickupTime] = useState(new Date()); // Default pickup time is current time
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -99,6 +102,7 @@ const Menu = () => {
           items: orderItems,
           totalPrice: parseFloat(cartTotal), // Convert totalPrice to float
           status: "placed",
+          pickupTime: pickupTime, // Include the selected pickup time
         };
 
         const response = await axios.post(
@@ -180,6 +184,8 @@ const Menu = () => {
         </div>
         {/* Display total sum of items in the cart */}
         <p>Total: ${cartTotal}</p>
+        {/* Date/time picker for selecting pickup time */}
+        <Datepicker onChange={setPickupTime} value={pickupTime} />
         {/* Button to proceed to checkout */}
         <button onClick={proceedToCheckout}>Place Order</button>
       </div>
