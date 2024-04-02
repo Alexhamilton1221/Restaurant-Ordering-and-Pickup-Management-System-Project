@@ -1,27 +1,25 @@
+// order.model.js
+
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
   user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    type: String, // Assuming user is identified by some unique string value
     required: true,
   },
   restaurant: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Restaurant",
+    type: String, // Storing restaurant name instead of ID
     required: true,
   },
   items: [
     {
       menuItem: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "MenuItem",
+        type: String, // Storing menu item name instead of ID
         required: true,
       },
       quantity: {
         type: Number,
         required: true,
-        default: 1,
       },
     },
   ],
@@ -31,11 +29,9 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["placed", "processing", "completed", "cancelled"],
+    enum: ["placed", "processing", "completed"],
     default: "placed",
   },
 });
 
-const Order = mongoose.model("Order", orderSchema);
-
-module.exports = Order;
+module.exports = mongoose.model("Order", orderSchema);

@@ -1,9 +1,8 @@
+// orders.js
+
 const express = require("express");
 const router = express.Router();
 const Order = require("../models/order");
-
-const User = require("../models/user");
-const { Restaurant, MenuItem } = require("../models/restaurant");
 
 // Middleware to get a single order by ID
 async function getOrder(req, res, next) {
@@ -37,53 +36,25 @@ router.get("/:id", getOrder, (req, res) => {
 
 // Creating a new order
 router.post("/", async (req, res) => {
-  const { userId, restaurantId, items } = req.body;
+  const { user, restaurant, items, totalPrice } = req.body; // Extract user, restaurant, items, totalPrice from req.body
 
   try {
-    // Check if the user and restaurant exist
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    const restaurant = await Restaurant.findById(restaurantId);
-    if (!restaurant) {
-      return res.status(404).json({ message: "Restaurant not found" });
-    }
-
-    // Check if items are available and not sold out
-    for (const item of items) {
-      const menuItem = await MenuItem.findById(item.menuItemId);
-      if (!menuItem) {
-        return res.status(404).json({ message: "Menu item not found" });
-      }
-      if (menuItem.soldOut) {
-        return res
-          .status(400)
-          .json({ message: `${menuItem.name} is sold out` });
-      }
-    }
-
-    // Calculate total price and create order
-    let totalPrice = 0;
-    const orderItems = [];
-    for (const item of items) {
-      const menuItem = await MenuItem.findById(item.menuItemId);
-      totalPrice += menuItem.price * item.quantity;
-      orderItems.push({ menuItem: menuItem._id, quantity: item.quantity });
-    }
-
     // Create the order
     const newOrder = new Order({
-      user: userId,
-      restaurant: restaurantId,
-      items: orderItems,
-      totalPrice: totalPrice,
+      user,
+      restaurant,
+      items,
+      totalPrice,
+      status: "placed",
     });
 
+    // Save the order to the database
     const savedOrder = await newOrder.save();
+
+    // Respond with the created order
     res.status(201).json(savedOrder);
   } catch (error) {
+    // Handle any errors
     res.status(400).json({ message: error.message });
   }
 });
@@ -91,24 +62,13 @@ router.post("/", async (req, res) => {
 // Updating an order by ID
 router.patch("/:id", getOrder, async (req, res) => {
   try {
-    const { userId, restaurantId, items } = req.body;
-
-    // Check if the provided user ID exists
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    // Check if the provided restaurant ID exists
-    const restaurant = await Restaurant.findById(restaurantId);
-    if (!restaurant) {
-      return res.status(404).json({ message: "Restaurant not found" });
-    }
+    const { user, restaurant, items, totalPrice } = req.body;
 
     // Update the order with the new information
-    res.order.user = userId;
-    res.order.restaurant = restaurantId;
+    res.order.user = user;
+    res.order.restaurant = restaurant;
     res.order.items = items;
+    res.order.totalPrice = totalPrice;
 
     // Save the updated order
     const updatedOrder = await res.order.save();

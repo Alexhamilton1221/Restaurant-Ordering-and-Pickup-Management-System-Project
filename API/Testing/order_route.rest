@@ -4,17 +4,22 @@ GET http://localhost:4000/orders
 ### Get an order
 GET http://localhost:4000/orders/65fb550d7dd8d9d6de172ad6
 
-### Create order
+### Create order sample
+
 POST http://localhost:4000/orders
 Content-Type: application/json
+
 {
-    "userId": "65fa52e9fd40cf12697c3882",
-    "restaurantId": "65fd5d10aa3c5f39d245090d",
-    "items": [
-        { "menuItemId": "65fd5d10aa3c5f39d245090e", "quantity": 2 },
-        { "menuItemId": "65fd5d10aa3c5f39d2450912", "quantity": 1 }
-    ]
+  "userId": "65fcd53b7f177dc3c541b871",
+  "restaurantId": "65fd5d10aa3c5f39d245090d",
+  "items": [
+    { "menuItemId": "65fd5d10aa3c5f39d2450912", "quantity": 1 },
+    { "menuItemId": "65fd5d10aa3c5f39d245090e", "quantity": 2 },
+    { "menuItemId": "65fd5d10aa3c5f39d2450916", "quantity": 1 }
+  ]
 }
+
+
 
 ### Delete order
 DELETE http://localhost:4000/orders/65fb54fa7dd8d9d6de172ac9

@@ -80,7 +80,40 @@ const Menu = () => {
     .reduce((total, item) => total + item.price * item.quantity, 0)
     .toFixed(2);
 
-  const proceedToCheckout = () => {
+  const createOrder = async () => {
+    try {
+      const storedUser = localStorage.getItem("user");
+      const user = storedUser ? JSON.parse(storedUser) : null;
+      const userId = user ? user._id : null;
+      const storedRestaurantId = localStorage.getItem("selectedRestaurantId");
+      if (userId && storedRestaurantId) {
+        const orderItems = cartItems.map((item) => ({
+          menuItem: item.name, // Store menu item name instead of ID
+          quantity: item.quantity,
+        }));
+
+        const orderData = {
+          user: user.name, // Store user name instead of ID
+          restaurant: restaurant.name, // Store restaurant name instead of ID
+          items: orderItems,
+          totalPrice: parseFloat(cartTotal), // Convert totalPrice to float
+          status: "placed",
+        };
+
+        alert(`Order Data: ${JSON.stringify(orderData)}`); // Alert the orderData
+
+        const response = await axios.post(
+          "http://localhost:4000/orders",
+          orderData
+        );
+        console.log("Order created:", response.data);
+      }
+    } catch (error) {
+      console.error("Error creating order:", error);
+    }
+  };
+
+  const proceedToCheckout = async () => {
     if (parseFloat(cartTotal) === 0) {
       alert(
         "Your cart is empty. Please add items before proceeding to checkout."
@@ -95,7 +128,10 @@ const Menu = () => {
         : "No restaurant ID found"; // Get restaurant ID or set default message
       alert(`Order placed! User ID: ${userId}, Restaurant ID: ${restaurantId}`);
       setCartItems([]); // Empty the cart after placing the order
-      navigate("/Homepage");
+      navigate("/HomePage");
+
+      // Create the order after displaying the alert
+      await createOrder();
     }
   };
 
