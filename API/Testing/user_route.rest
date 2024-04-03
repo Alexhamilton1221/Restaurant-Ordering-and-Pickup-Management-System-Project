@@ -9,12 +9,41 @@ POST http://localhost:4000/users
 Content-Type: application/json
 
 {
-    "name": "TestCase",
-    "age": 69,
-    "username": "TE: ",
-    "password": "T"
+    "name": "Customer",
+    "age": 20,
+    "username": "C",
+    "password": "C",
+    "role": "customer",
+    "employed_for": "none"
+
+}
+### Create user
+POST http://localhost:4000/users
+Content-Type: application/json
+
+{
+    "name": "Manager",
+    "age": 25,
+    "username": "M",
+    "password": "M",
+    "role": "manager",
+    "employed_for": "Star Spot"
 }
 
+
+### Create user
+
+POST http://localhost:4000/users
+Content-Type: application/json
+
+{
+    "name": "Manager",
+    "age": 25,
+    "username": "M",
+    "password": "M",
+    "role": "manager",
+    "employed_for": "Tasty Bites"
+}
 
 ### Delete user
 DELETE http://localhost:4000/users/66010d16aa0b53f0e146840c

@@ -18,7 +18,10 @@ router.get("/name", async (req, res) => {
 // Getting all users
 router.get("/", async (req, res) => {
   try {
-    const users = await User.find({}, "name age username password");
+    const users = await User.find(
+      {},
+      "name age username password role employed_for"
+    );
     res.json(users);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -32,12 +35,17 @@ router.get("/:id", getUser, (req, res) => {
 
 // Creating a new user
 router.post("/", async (req, res) => {
+  const { name, age, username, password, role, employed_for } = req.body;
+
   const user = new User({
-    name: req.body.name,
-    age: req.body.age,
-    username: req.body.username,
-    password: req.body.password,
+    name,
+    age,
+    username,
+    password,
+    role: role || "customer", // Default role is "customer" if not provided
+    employed_for: role === "customer" ? "none" : employed_for, // Default employed_for is "none" for customers
   });
+
   try {
     const newUser = await user.save();
     res.status(201).json(newUser);
@@ -53,6 +61,9 @@ router.patch("/:id", getUser, async (req, res) => {
     res.user.age = req.body.age;
     res.user.username = req.body.username;
     res.user.password = req.body.password;
+    res.user.role = req.body.role || "customer"; // Default role is "customer" if not provided
+    res.user.employed_for =
+      req.body.role === "customer" ? "none" : req.body.employed_for; // Default employed_for is "none" for customers
   }
 
   try {

@@ -18,10 +18,19 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  role: {
+    type: String,
+    enum: ["customer", "employee", "manager"],
+    default: "customer",
+  },
+  employed_for: {
+    type: String,
+    default: "none", // Default to "none" for customers
+  },
 });
 
-// Method to compare password with stored password hash
 userSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
+
 module.exports = mongoose.model("User", userSchema);

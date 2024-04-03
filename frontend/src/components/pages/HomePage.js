@@ -8,6 +8,7 @@ const HomePage = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [showRestaurants, setShowRestaurants] = useState(true);
   const [userOrders, setUserOrders] = useState([]);
+  const [userRole, setUserRole] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,11 +18,11 @@ const HomePage = () => {
         if (storedUser) {
           const user = JSON.parse(storedUser);
           setUserFullName(user.name);
-          // Fetch orders for the current user
+          setUserRole(user.role); // Set user role
+
           const ordersResponse = await axios.get(
             `http://localhost:4000/orders/user/${user.name}`
           );
-
           setUserOrders(ordersResponse.data);
         }
 
@@ -42,19 +43,6 @@ const HomePage = () => {
     navigate(`/menu`);
   };
 
-  const handleOrdersButtonClick = () => {
-    setShowRestaurants(false);
-    console.log("Orders button clicked, showRestaurants:", showRestaurants);
-  };
-
-  const handleRestaurantsButtonClick = () => {
-    setShowRestaurants(true);
-    console.log(
-      "Restaurants button clicked, showRestaurants:",
-      showRestaurants
-    );
-  };
-
   const getMenuPrice = (menuItemName) => {
     const menuItem = restaurants.find((restaurant) =>
       restaurant.menu.find((item) => item.name === menuItemName)
@@ -67,15 +55,34 @@ const HomePage = () => {
     }
   };
 
-  console.log("Rendering with showRestaurants:", showRestaurants);
-
   return (
     <div className="homepage">
       <div className="homepage-header">
         <h1>Welcome to MealMate, {userFullName}!</h1>
         <div className="homepage-buttons">
-          <button onClick={handleRestaurantsButtonClick}>Restaurants</button>
-          <button onClick={handleOrdersButtonClick}>Orders</button>
+          {(userRole === "employee" || userRole === "manager") && (
+            <button onClick={() => navigate("/menu-management")}>
+              Menu Management
+            </button>
+          )}
+          {(userRole === "employee" || userRole === "manager") && (
+            <button onClick={() => navigate("/order-processing")}>
+              Order Processing
+            </button>
+          )}
+          {userRole === "customer" && (
+            <button onClick={() => setShowRestaurants(true)}>
+              Restaurants
+            </button>
+          )}
+          {userRole === "customer" && (
+            <button onClick={() => setShowRestaurants(false)}>Orders</button>
+          )}
+          {userRole === "manager" && (
+            <button onClick={() => navigate("/analytics-dashboard")}>
+              Analytics Dashboard
+            </button>
+          )}
         </div>
       </div>
       {showRestaurants ? (
