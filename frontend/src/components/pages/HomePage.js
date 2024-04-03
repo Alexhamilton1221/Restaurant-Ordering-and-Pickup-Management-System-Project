@@ -98,25 +98,33 @@ const HomePage = () => {
       ) : (
         <div>
           <h2>Your Orders</h2>
-          <ul>
-            {userOrders.map((order) => (
-              <li key={order._id}>
-                <p>Restaurant Name: {order.restaurant}</p>
-                <p>Order ID: {order._id}</p>
-
-                <ul>
-                  {order.items.map((item) => (
-                    <li key={item._id}>
-                      {item.menuItem} - Quantity: {item.quantity}, Cost: $
-                      {item.quantity * getMenuPrice(item.menuItem)}
-                    </li>
-                  ))}
-                </ul>
-                <p>Total Price: ${order.totalPrice}</p>
-                <p>Order Status: {order.status}</p>
-              </li>
-            ))}
-          </ul>
+          {userOrders.map((order) => (
+            <div key={order._id} className="order-wrapper">
+              <p>Restaurant Name: {order.restaurant}</p>
+              <p>
+                Pickup Time:{" "}
+                {new Date(order.pickupTime).toLocaleString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                  hour12: true,
+                })}
+              </p>
+              <p>Order ID: {order._id}</p>
+              <div>
+                {order.items.map((item) => (
+                  <p key={item._id}>
+                    {item.menuItem} - Quantity: {item.quantity}, Cost: $
+                    {item.quantity * getMenuPrice(item.menuItem)}
+                  </p>
+                ))}
+              </div>
+              <p>Total Price: ${order.totalPrice}</p>
+              <p>Order Status: {order.status}</p>
+            </div>
+          ))}
         </div>
       )}
     </div>
