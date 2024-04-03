@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../styles/HomePage.css";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const [userFullName, setUserFullName] = useState("");
@@ -10,7 +11,7 @@ const HomePage = () => {
   const [managerView, setManagerView] = useState(false);
   const [userOrders, setUserOrders] = useState([]);
   const [userRole, setUserRole] = useState("");
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,6 +42,7 @@ const HomePage = () => {
   const handleRestaurantClick = (restaurantId) => {
     localStorage.setItem("selectedRestaurantId", restaurantId);
     // Handle restaurant click action here
+    navigate(`/menu`);
   };
 
   const getMenuPrice = (menuItemName) => {
