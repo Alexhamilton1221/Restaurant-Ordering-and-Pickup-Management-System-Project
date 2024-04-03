@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import "../styles/HomePage.css";
 
 const HomePage = () => {
   const [userFullName, setUserFullName] = useState("");
   const [restaurants, setRestaurants] = useState([]);
-  const [showRestaurants, setShowRestaurants] = useState(true);
+  const [customerView, setCustomerView] = useState(true);
+  const [employeeView, setEmployeeView] = useState(false);
+  const [managerView, setManagerView] = useState(false);
   const [userOrders, setUserOrders] = useState([]);
   const [userRole, setUserRole] = useState("");
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,7 +18,7 @@ const HomePage = () => {
         if (storedUser) {
           const user = JSON.parse(storedUser);
           setUserFullName(user.name);
-          setUserRole(user.role); // Set user role
+          setUserRole(user.role);
 
           const ordersResponse = await axios.get(
             `http://localhost:4000/orders/user/${user.name}`
@@ -40,7 +40,7 @@ const HomePage = () => {
 
   const handleRestaurantClick = (restaurantId) => {
     localStorage.setItem("selectedRestaurantId", restaurantId);
-    navigate(`/menu`);
+    // Handle restaurant click action here
   };
 
   const getMenuPrice = (menuItemName) => {
@@ -55,37 +55,46 @@ const HomePage = () => {
     }
   };
 
+  useEffect(() => {
+    // Check if the user is an employee and set the employee view accordingly
+    if (userRole === "employee") {
+      setEmployeeView(true);
+      setCustomerView(false);
+      setManagerView(false);
+    }
+  }, [userRole]);
+
   return (
     <div className="homepage">
       <div className="homepage-header">
         <h1>Welcome to MealMate, {userFullName}!</h1>
         <div className="homepage-buttons">
-          {(userRole === "employee" || userRole === "manager") && (
-            <button onClick={() => navigate("/menu-management")}>
-              Menu Management
-            </button>
-          )}
-          {(userRole === "employee" || userRole === "manager") && (
-            <button onClick={() => navigate("/order-processing")}>
-              Order Processing
-            </button>
-          )}
           {userRole === "customer" && (
-            <button onClick={() => setShowRestaurants(true)}>
-              Restaurants
-            </button>
+            <>
+              <button onClick={() => setCustomerView(true)}>Restaurants</button>
+              <button onClick={() => setCustomerView(false)}>Orders</button>
+            </>
           )}
-          {userRole === "customer" && (
-            <button onClick={() => setShowRestaurants(false)}>Orders</button>
+          {userRole === "employee" && (
+            <>
+              <button onClick={() => setEmployeeView(true)}>
+                Menu Management
+              </button>
+              <button onClick={() => setEmployeeView(false)}>
+                Order Processing
+              </button>
+            </>
           )}
           {userRole === "manager" && (
-            <button onClick={() => navigate("/analytics-dashboard")}>
-              Analytics Dashboard
-            </button>
+            <>
+              <button onClick={() => setManagerView(true)}>
+                Analytics Dashboard
+              </button>
+            </>
           )}
         </div>
       </div>
-      {showRestaurants ? (
+      {customerView && (
         <div>
           <h2>Choose a restaurant to order from:</h2>
           <div className="restaurant-list">
@@ -102,7 +111,20 @@ const HomePage = () => {
             ))}
           </div>
         </div>
-      ) : (
+      )}
+      {employeeView && (
+        <div>
+          <h2>Employee View Content</h2>
+          {/* Add content specific to employee view */}
+        </div>
+      )}
+      {managerView && (
+        <div>
+          <h2>Manager View Content</h2>
+          {/* Add content specific to manager view */}
+        </div>
+      )}
+      {!(customerView || employeeView || managerView) && (
         <div>
           <h2>Your Orders</h2>
           {userOrders.map((order) => (
