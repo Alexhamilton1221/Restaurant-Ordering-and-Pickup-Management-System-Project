@@ -44,7 +44,7 @@ router.get("/:id", getOrder, (req, res) => {
   res.json(res.order);
 });
 
-/// Creating a new order
+// Creating a new order
 router.post("/", async (req, res) => {
   const { user, restaurant, items, totalPrice, pickupTime } = req.body; // Extract user, restaurant, items, totalPrice, and pickupTime from req.body
 
@@ -77,27 +77,52 @@ router.post("/", async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
-
-// Updating an order by ID
-router.patch("/:id", getOrder, async (req, res) => {
+// Updating an order status by ID
+router.patch("/:id/status", getOrder, async (req, res) => {
   try {
-    const { user, restaurant, items, totalPrice, pickupTime } = req.body;
+    const { status } = req.body;
 
-    // Convert pickupTime to MST
-    const mstPickupTime = moment.tz(pickupTime, "America/Denver").toDate();
+    // Check if the new status is one of the allowed values
+    if (
+      !["ordered", "in-progress", "awaiting-pickup", "completed"].includes(
+        status
+      )
+    ) {
+      return res.status(400).json({ message: "Invalid status value" });
+    }
 
-    // Update the order with the new information
-    res.order.user = user;
-    res.order.restaurant = restaurant;
-    res.order.items = items;
-    res.order.totalPrice = totalPrice;
-    res.order.pickupTime = mstPickupTime; // Update pickupTime
+    // Update the order status
+    res.order.status = status;
 
     // Save the updated order
     const updatedOrder = await res.order.save();
     res.json(updatedOrder);
   } catch (err) {
     res.status(400).json({ message: err.message });
+  }
+});
+// Update order status by ID
+router.patch("/:orderId/status", async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+
+    // Find the order by ID
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    // Update the order status
+    order.status = status;
+
+    // Save the changes to the order
+    const updatedOrder = await order.save();
+
+    res.json(updatedOrder);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 

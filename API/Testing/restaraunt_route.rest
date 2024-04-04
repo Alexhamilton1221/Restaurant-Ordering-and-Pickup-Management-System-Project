@@ -20,13 +20,6 @@ DELETE http://localhost:4000/restaurants/65fdadf91f347f6e6a2e9693
 
 # ### Update restaurant
 
-# PATCH http://localhost:4000/restaurants/65fd5d10aa3c5f39d245090d
-# Content-Type: application/json
-# {
-#     "name": "New Dawn",
-#     "location": "456 Elm St new",
-#     "rating": 4.7
-# }
 
 ### Update restaurant soldOut
 PATCH http://localhost:4000/restaurants/65fd5d10aa3c5f39d245090d/menu/65fd5d10aa3c5f39d245090e

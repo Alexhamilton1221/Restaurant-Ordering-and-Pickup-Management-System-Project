@@ -1,5 +1,5 @@
 ## Get all orders
-GET http://localhost:4000/orders
+GET http://localhost:4000/orders/
 
 ### Get an order
 GET http://localhost:4000/orders/65fb550d7dd8d9d6de172ad6
@@ -33,4 +33,14 @@ Content-Type: application/json
     "items": [
         { "menuItemId": "65fb3b8b8520f755e67b654f", "quantity": 3 }
     ]
+}
+
+### Change status of Order
+
+//PATCH http://localhost:4000/orders/660dc819ff19ad0d03ab44f5/status
+PATCH http://localhost:4000/orders/660dc819ff19ad0d03ab44f5/status
+Content-Type: application/json
+
+{
+  "status": "awaiting-pickup"
 }

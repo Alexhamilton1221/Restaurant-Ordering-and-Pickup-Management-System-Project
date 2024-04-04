@@ -31,8 +31,8 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["placed", "processing", "completed"],
-    default: "placed",
+    enum: ["ordered", "in-progress", "awaiting-pickup", "completed"],
+    default: "ordered",
   },
   pickupTime: {
     type: Date, // Assuming pickup time is a Date object

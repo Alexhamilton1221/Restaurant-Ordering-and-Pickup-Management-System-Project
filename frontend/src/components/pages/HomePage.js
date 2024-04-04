@@ -12,6 +12,8 @@ const HomePage = () => {
   const [userOrders, setUserOrders] = useState([]);
   const [allOrders, setAllOrders] = useState([]); // State to store all orders
   const [userRole, setUserRole] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState(""); // State to store selected status for each order
+
   const navigate = useNavigate();
 
   const [employee, setEmployee] = useState(null); // State to store employee data
@@ -139,7 +141,6 @@ const HomePage = () => {
       alert("Error deleting menu item. See console for details.");
     }
   };
-
   const handleAddNewItem = async (restaurantId) => {
     try {
       // Implement the logic to add a new item here
@@ -151,7 +152,43 @@ const HomePage = () => {
       alert("Error adding new item. See console for details.");
     }
   };
+  // Function to handle status change in the dropdown
+  const handleStatusChange = (orderId, newStatus) => {
+    try {
+      // Update the local state with the new status for the specific order
+      setUserOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === orderId ? { ...order, status: newStatus } : order
+        )
+      );
 
+      setAllOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === orderId ? { ...order, status: newStatus } : order
+        )
+      );
+
+      // Update the selected status state
+      setSelectedStatus(newStatus);
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      alert("Error updating order status. See console for details.");
+    }
+  };
+
+  // Function to handle confirmation button click
+  const handleConfirm = async (orderId) => {
+    try {
+      // Use the selectedStatus state variable instead of directly accessing the dropdown value
+      await axios.patch(`http://localhost:4000/orders/${orderId}/status`, {
+        status: selectedStatus,
+      });
+      console.log("Order confirmed:", orderId);
+    } catch (error) {
+      console.error("Error confirming order:", error);
+      alert("Error confirming order. See console for details.");
+    }
+  };
   useEffect(() => {
     // Check if the user is an employee and set the employee view accordingly
     if (userRole === "employee") {
@@ -296,7 +333,7 @@ const HomePage = () => {
           </div>
         )}
 
-      {userRole === "employee" && (
+      {userRole === "employee" && (!employeeView || managerView) && (
         <div>
           <h2>All Orders</h2>
           {allOrders.map((order) => (
@@ -324,6 +361,18 @@ const HomePage = () => {
               </div>
               <p>Total Price: ${order.totalPrice}</p>
               <p>Order Status: {order.status}</p>
+              {/* Dropdown for statuses */}
+              <select
+                value={order.status}
+                onChange={(e) => handleStatusChange(order._id, e.target.value)}
+              >
+                <option value="ordered">Ordered</option>
+                <option value="in-progress">In Progress</option>
+                <option value="awaiting-pickup">Awaiting Pickup</option>
+                <option value="completed">Completed</option>
+              </select>
+              {/* Button to confirm changes */}
+              <button onClick={() => handleConfirm(order._id)}>Confirm</button>
             </div>
           ))}
         </div>
