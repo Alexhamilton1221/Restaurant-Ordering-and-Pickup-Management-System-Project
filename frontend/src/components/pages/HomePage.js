@@ -12,6 +12,9 @@ const HomePage = () => {
   const [userOrders, setUserOrders] = useState([]);
   const [userRole, setUserRole] = useState("");
   const navigate = useNavigate();
+
+  const [employee, setEmployee] = useState(null); // State to store employee data
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -25,6 +28,15 @@ const HomePage = () => {
             `http://localhost:4000/orders/user/${user.name}`
           );
           setUserOrders(ordersResponse.data);
+
+          if (userRole === "employee") {
+            // Fetch employee data
+            const employeeResponse = await axios.get(
+              `http://localhost:4000/users/${user._id}` // Updated URL
+            );
+
+            setEmployee(employeeResponse.data);
+          }
         }
 
         const restaurantsResponse = await axios.get(
@@ -37,7 +49,7 @@ const HomePage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [userRole]); // Fetch data whenever user role changes
 
   const handleRestaurantClick = (restaurantId) => {
     localStorage.setItem("selectedRestaurantId", restaurantId);
@@ -114,10 +126,29 @@ const HomePage = () => {
           </div>
         </div>
       )}
-      {employeeView && (
+      {employeeView && employee && (
         <div>
           <h2>Employee View Content</h2>
-          {/* Add content specific to employee view */}
+          {/* Render menu items for the restaurant the employee works for */}
+          {restaurants.map((restaurant) => {
+            if (employee.employed_for === restaurant.name) {
+              return (
+                <div key={restaurant._id}>
+                  <h3>{restaurant.name} Menu</h3>
+                  <div className="menu-items">
+                    {restaurant.menu.map((menuItem) => (
+                      <div key={menuItem._id} className="menu-item">
+                        <h4>{menuItem.name}</h4>
+                        <p>Description: {menuItem.description}</p>
+                        <p>Price: ${menuItem.price}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            }
+            return null;
+          })}
         </div>
       )}
       {managerView && (
