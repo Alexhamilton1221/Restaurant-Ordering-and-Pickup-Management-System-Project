@@ -24,11 +24,9 @@ async function getRestaurantMenuById(req, res, next) {
       "menu"
     );
     if (!restaurant) {
-      return res
-        .status(404)
-        .json({
-          message: `Restaurant not found for ID: ${req.params.restaurantId}`,
-        });
+      return res.status(404).json({
+        message: `Restaurant not found for ID: ${req.params.restaurantId}`,
+      });
     }
   } catch (err) {
     console.error("Error finding restaurant:", err);
@@ -207,6 +205,38 @@ router.get("/:restaurantId/menu", async (req, res) => {
     res.json(restaurant.menu);
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+// Update menu item sold out status
+router.patch("/:restaurantId/menu/:itemId", async (req, res) => {
+  try {
+    const { restaurantId, itemId } = req.params;
+
+    // Find the restaurant by ID and populate its menu
+    const restaurant = await Restaurant.findById(restaurantId).populate("menu");
+    if (!restaurant) {
+      return res.status(404).json({ message: "Restaurant not found" });
+    }
+
+    // Find the menu item by ID in the restaurant's menu
+    const menuItem = restaurant.menu.find(
+      (item) => item._id.toString() === itemId
+    );
+    if (!menuItem) {
+      return res.status(404).json({ message: "Menu item not found" });
+    }
+
+    // Update the sold out status based on the request body
+    menuItem.soldOut = req.body.soldOut;
+
+    // Save the changes to the menu item
+    await menuItem.save();
+
+    res.json(menuItem);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 

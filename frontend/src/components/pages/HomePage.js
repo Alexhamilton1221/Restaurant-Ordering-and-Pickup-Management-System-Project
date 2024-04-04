@@ -69,6 +69,70 @@ const HomePage = () => {
     }
   };
 
+  const toggleItemSoldOut = async (restaurantId, itemId) => {
+    try {
+      const updatedRestaurants = [...restaurants];
+      const restaurantIndex = updatedRestaurants.findIndex(
+        (r) => r._id === restaurantId
+      );
+      if (restaurantIndex !== -1) {
+        const restaurant = updatedRestaurants[restaurantIndex];
+        const menuItemIndex = restaurant.menu.findIndex(
+          (item) => item._id === itemId
+        );
+        if (menuItemIndex !== -1) {
+          const updatedMenu = [...restaurant.menu];
+          updatedMenu[menuItemIndex].soldOut =
+            !updatedMenu[menuItemIndex].soldOut;
+          updatedRestaurants[restaurantIndex] = {
+            ...restaurant,
+            menu: updatedMenu,
+          };
+          setRestaurants(updatedRestaurants);
+
+          // Send PATCH request to update soldOut status
+          await axios.patch(
+            `http://localhost:4000/restaurants/${restaurantId}/menu/${itemId}`,
+            { soldOut: updatedMenu[menuItemIndex].soldOut },
+            { headers: { "Content-Type": "application/json" } }
+          );
+
+          alert(`Item ${itemId} sold out status toggled successfully!`);
+        }
+      }
+    } catch (error) {
+      console.error("Error toggling item sold out:", error);
+      alert("Error toggling item sold out. See console for details.");
+    }
+  };
+
+  const deleteMenuItem = async (restaurantId, itemId) => {
+    try {
+      const updatedRestaurants = [...restaurants];
+      const restaurantIndex = updatedRestaurants.findIndex(
+        (r) => r._id === restaurantId
+      );
+      if (restaurantIndex !== -1) {
+        const restaurant = updatedRestaurants[restaurantIndex];
+        const updatedMenu = restaurant.menu.filter(
+          (item) => item._id !== itemId
+        );
+        updatedRestaurants[restaurantIndex] = {
+          ...restaurant,
+          menu: updatedMenu,
+        };
+        setRestaurants(updatedRestaurants);
+        await axios.delete(
+          `http://localhost:4000/restaurants/${restaurantId}/menu/${itemId}`
+        );
+        alert(`Menu item ${itemId} deleted successfully!`);
+      }
+    } catch (error) {
+      console.error("Error deleting menu item:", error);
+      alert("Error deleting menu item. See console for details.");
+    }
+  };
+
   useEffect(() => {
     // Check if the user is an employee and set the employee view accordingly
     if (userRole === "employee") {
@@ -141,6 +205,22 @@ const HomePage = () => {
                         <h4>{menuItem.name}</h4>
                         <p>Description: {menuItem.description}</p>
                         <p>Price: ${menuItem.price}</p>
+                        <button
+                          onClick={() =>
+                            toggleItemSoldOut(restaurant._id, menuItem._id)
+                          }
+                        >
+                          {menuItem.soldOut
+                            ? "Mark Available"
+                            : "Mark Sold Out"}
+                        </button>
+                        <button
+                          onClick={() =>
+                            deleteMenuItem(restaurant._id, menuItem._id)
+                          }
+                        >
+                          Delete
+                        </button>
                       </div>
                     ))}
                   </div>
@@ -151,6 +231,7 @@ const HomePage = () => {
           })}
         </div>
       )}
+
       {managerView && (
         <div>
           <h2>Manager View Content</h2>
