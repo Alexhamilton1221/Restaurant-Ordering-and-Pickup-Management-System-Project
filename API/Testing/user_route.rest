@@ -9,10 +9,10 @@ POST http://localhost:4000/users
 Content-Type: application/json
 
 {
-    "name": "Customer",
+    "name": "Joe",
     "age": 20,
-    "username": "C",
-    "password": "C",
+    "username": "J",
+    "password": "J",
     "role": "customer",
     "employed_for": "none"
 

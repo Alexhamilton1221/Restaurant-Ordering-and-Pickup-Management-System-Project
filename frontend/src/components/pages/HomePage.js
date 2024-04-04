@@ -10,6 +10,7 @@ const HomePage = () => {
   const [employeeView, setEmployeeView] = useState(false);
   const [managerView, setManagerView] = useState(false);
   const [userOrders, setUserOrders] = useState([]);
+  const [allOrders, setAllOrders] = useState([]); // State to store all orders
   const [userRole, setUserRole] = useState("");
   const navigate = useNavigate();
 
@@ -36,6 +37,12 @@ const HomePage = () => {
             );
 
             setEmployee(employeeResponse.data);
+
+            // Fetch all orders for employees
+            const ordersResponse = await axios.get(
+              `http://localhost:4000/orders`
+            );
+            setAllOrders(ordersResponse.data);
           }
         }
 
@@ -97,7 +104,7 @@ const HomePage = () => {
             { headers: { "Content-Type": "application/json" } }
           );
 
-          alert(`Item ${itemId} sold out status toggled successfully!`);
+          // alert(`Item ${itemId} sold out status toggled successfully!`);
         }
       }
     } catch (error) {
@@ -130,6 +137,18 @@ const HomePage = () => {
     } catch (error) {
       console.error("Error deleting menu item:", error);
       alert("Error deleting menu item. See console for details.");
+    }
+  };
+
+  const handleAddNewItem = async (restaurantId) => {
+    try {
+      // Implement the logic to add a new item here
+      // For example, you can navigate to a new page to add a new item
+      // Or you can show a modal for adding a new item
+      console.log("Adding a new item for restaurant:", restaurantId);
+    } catch (error) {
+      console.error("Error adding new item:", error);
+      alert("Error adding new item. See console for details.");
     }
   };
 
@@ -199,6 +218,11 @@ const HomePage = () => {
               return (
                 <div key={restaurant._id}>
                   <h3>{restaurant.name} Menu</h3>
+                  {/* Button to add a new item */}
+                  <button onClick={() => handleAddNewItem(restaurant._id)}>
+                    Add New Item
+                  </button>
+
                   <div className="menu-items">
                     {restaurant.menu.map((menuItem) => (
                       <div key={menuItem._id} className="menu-item">
@@ -238,10 +262,44 @@ const HomePage = () => {
           {/* Add content specific to manager view */}
         </div>
       )}
-      {!(customerView || employeeView || managerView) && (
+      {userRole === "customer" &&
+        (!customerView || employeeView || managerView) && (
+          <div>
+            <h2>My Orders </h2>
+            {userOrders.map((order) => (
+              <div key={order._id} className="order-wrapper">
+                <p>Restaurant Name: {order.restaurant}</p>
+                <p>
+                  Pickup Time:{" "}
+                  {new Date(order.pickupTime).toLocaleString("en-US", {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                    hour12: true,
+                  })}
+                </p>
+                <p>Order ID: {order._id}</p>
+                <div>
+                  {order.items.map((item) => (
+                    <p key={item._id}>
+                      {item.menuItem} - Quantity: {item.quantity}, Cost: $
+                      {item.quantity * getMenuPrice(item.menuItem)}
+                    </p>
+                  ))}
+                </div>
+                <p>Total Price: ${order.totalPrice}</p>
+                <p>Order Status: {order.status}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+      {userRole === "employee" && (
         <div>
-          <h2>Your Orders</h2>
-          {userOrders.map((order) => (
+          <h2>All Orders</h2>
+          {allOrders.map((order) => (
             <div key={order._id} className="order-wrapper">
               <p>Restaurant Name: {order.restaurant}</p>
               <p>
