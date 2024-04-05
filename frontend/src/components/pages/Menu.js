@@ -104,7 +104,7 @@ const Menu = () => {
           restaurant: restaurant.name,
           items: orderItems,
           totalPrice: parseFloat(cartTotal),
-          status: "placed",
+          status: "ordered",
           pickupTime: isoPickupTime,
         };
 
@@ -133,6 +133,7 @@ const Menu = () => {
         ? storedRestaurantId
         : "No restaurant ID found"; // Get restaurant ID or set default message
       alert(`Order placed!`);
+
       setCartItems([]); // Empty the cart after placing the order
       navigate("/HomePage");
 

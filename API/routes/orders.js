@@ -64,7 +64,7 @@ router.post("/", async (req, res) => {
       items,
       totalPrice,
       pickupTime: adjustedPickupTime, // Adjusted pickupTime
-      status: "placed",
+      status: "ordered",
     });
 
     // Save the order to the database

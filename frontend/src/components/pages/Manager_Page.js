@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../styles/Manager_Page.css";
+import moment from "moment";
 
 const ManagerPage = () => {
   const [userFullName, setUserFullName] = useState("");
@@ -166,14 +167,14 @@ const ManagerPage = () => {
       return 0;
     }
   };
-  // Function to analyze the busiest time
+  /// Function to analyze the busiest time
   const getBusiestTime = (orders) => {
     // Initialize an array to count orders for each hour
     const orderCountsPerHour = Array(24).fill(0);
 
     // Loop through all orders and count orders for each hour
     orders.forEach((order) => {
-      const pickupHour = new Date(order.pickupTime).getHours();
+      const pickupHour = moment(order.pickupTime).subtract(6, "hours").hour();
       orderCountsPerHour[pickupHour]++;
     });
 
@@ -414,16 +415,13 @@ const ManagerPage = () => {
             <div>
               {/* <p>Analyzing {allOrders.length} orders...</p> */}
               <div>
-                {getBusiestTime(allOrders).map((hour) => (
-                  <p key={hour}>
-                    {hour % 12 || 12}:
-                    {(hour % 12 === 0 ? 12 : hour % 12) < 10 ? "00" : ""}
-                    {hour % 12 === hour ? "am" : "pm"}
-                  </p>
-                ))}
+                {getBusiestTime(allOrders).map((hour) => {
+                  const adjustedHour = moment(hour).add(6, "hours");
+                  return <p key={hour}>{adjustedHour.format("hh:mm a")}</p>;
+                })}
               </div>
               <div>
-                <h3>Most Popular Item:</h3>
+                <h3>Most Popular Item(s):</h3>
                 {getMostPopularItem(allOrders).map((itemName) => (
                   <p key={itemName}>{itemName}</p>
                 ))}
