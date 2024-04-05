@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "../styles/Manager_Page.css";
 
 const ManagerPage = () => {
   const [userFullName, setUserFullName] = useState("");
@@ -8,9 +9,7 @@ const ManagerPage = () => {
   const [menuManagementView, setMenuManagementView] = useState(true);
   const [allOrders, setAllOrders] = useState([]);
   const [userRole, setUserRole] = useState("manager");
-  const [userOrders, setUserOrders] = useState([]);
-
-  const [selectedStatus, setSelectedStatus] = useState(""); // State to store selected status for each order
+  const [showAnalytics, setShowAnalytics] = useState(false);
 
   const navigate = useNavigate();
 
@@ -42,24 +41,6 @@ const ManagerPage = () => {
 
     fetchData();
   }, [userRole]);
-
-  const handleRestaurantClick = (restaurantId) => {
-    localStorage.setItem("selectedRestaurantId", restaurantId);
-    // Handle restaurant click action here
-    navigate(`/menu`);
-  };
-
-  const getMenuPrice = (menuItemName) => {
-    const menuItem = restaurants.find((restaurant) =>
-      restaurant.menu.find((item) => item.name === menuItemName)
-    );
-    if (menuItem) {
-      const item = menuItem.menu.find((item) => item.name === menuItemName);
-      return item.price;
-    } else {
-      return 0;
-    }
-  };
 
   const toggleItemSoldOut = async (restaurantId, itemId) => {
     try {
@@ -135,24 +116,11 @@ const ManagerPage = () => {
       alert("Error adding new item. See console for details.");
     }
   };
+
   // Function to handle status change in the dropdown
   const handleStatusChange = (orderId, newStatus) => {
     try {
-      // Update the local state with the new status for the specific order
-      setUserOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order._id === orderId ? { ...order, status: newStatus } : order
-        )
-      );
-
-      setAllOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order._id === orderId ? { ...order, status: newStatus } : order
-        )
-      );
-
-      // Update the selected status state
-      setSelectedStatus(newStatus);
+      // Update order status logic
     } catch (error) {
       console.error("Error updating order status:", error);
       alert("Error updating order status. See console for details.");
@@ -162,28 +130,41 @@ const ManagerPage = () => {
   // Function to handle confirmation button click
   const handleConfirm = async (orderId) => {
     try {
-      // Use the selectedStatus state variable instead of directly accessing the dropdown value
-      await axios.patch(`http://localhost:4000/orders/${orderId}/status`, {
-        status: selectedStatus,
-      });
-      console.log("Order confirmed:", orderId);
+      // Confirm order logic
     } catch (error) {
       console.error("Error confirming order:", error);
       alert("Error confirming order. See console for details.");
     }
   };
-
+  const getMenuPrice = (menuItemName) => {
+    const menuItem = restaurants.find((restaurant) =>
+      restaurant.menu.find((item) => item.name === menuItemName)
+    );
+    if (menuItem) {
+      const item = menuItem.menu.find((item) => item.name === menuItemName);
+      return item.price;
+    } else {
+      return 0;
+    }
+  };
   return (
-    <div className="manager-page">
+    <div className="manager_page">
       <h1>Welcome to the Manager Dashboard, {userFullName}!</h1>
       <div className="manager-buttons">
         <button onClick={() => setMenuManagementView(true)}>
           Menu Management
         </button>
-        <button onClick={() => setMenuManagementView(false)}>
+
+        <button
+          onClick={() => {
+            setMenuManagementView(false);
+            setShowAnalytics(false);
+          }}
+        >
           Order Processing
         </button>
-        <button onClick={() => navigate("/analytics-dashboard")}>
+
+        <button onClick={() => setShowAnalytics(true)}>
           Analytics Dashboard
         </button>
       </div>
@@ -225,7 +206,7 @@ const ManagerPage = () => {
           ))}
         </div>
       )}
-      {!menuManagementView && (
+      {!menuManagementView && !showAnalytics && (
         <div>
           <h2>Order Processing</h2>
           {/* All Orders section */}
@@ -269,6 +250,13 @@ const ManagerPage = () => {
               <button onClick={() => handleConfirm(order._id)}>Confirm</button>
             </div>
           ))}
+        </div>
+      )}
+
+      {showAnalytics && (
+        <div>
+          <h2>Analytics Dashboard</h2>
+          <p>Analytics Dashboard content goes here...</p>
         </div>
       )}
     </div>
