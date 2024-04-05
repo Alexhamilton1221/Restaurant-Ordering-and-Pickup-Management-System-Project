@@ -160,6 +160,7 @@ const Menu = () => {
                   >
                     <h3>{menuItem.name}</h3>
                     <p>Price: ${menuItem.price}</p>
+                    {menuItem.description && <p>{menuItem.description}</p>}
                   </div>
                 ))}
             </div>

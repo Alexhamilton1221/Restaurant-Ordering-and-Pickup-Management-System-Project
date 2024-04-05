@@ -111,7 +111,7 @@ const HomePage = () => {
             { headers: { "Content-Type": "application/json" } }
           );
 
-          // alert(`Item ${itemId} sold out status toggled successfully!`);
+          alert(`Item ${itemId} sold out status toggled successfully!`);
         }
       }
     } catch (error) {
@@ -173,6 +173,8 @@ const HomePage = () => {
           description: newItemDescription,
         }
       );
+
+      alert(`${newItemName} has been added successfully.`);
 
       // Refresh data after adding item
       const restaurantsResponse = await axios.get(
