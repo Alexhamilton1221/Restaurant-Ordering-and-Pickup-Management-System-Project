@@ -195,6 +195,10 @@ const HomePage = () => {
       setEmployeeView(true);
       setCustomerView(false);
       setManagerView(false);
+    } else if (userRole === "manager") {
+      setManagerView(true);
+      setCustomerView(false);
+      setEmployeeView(true);
     }
   }, [userRole]);
 
@@ -221,6 +225,12 @@ const HomePage = () => {
           )}
           {userRole === "manager" && (
             <>
+              <button onClick={() => setEmployeeView(true)}>
+                Menu Management
+              </button>
+              <button onClick={() => setEmployeeView(false)}>
+                Order Processing
+              </button>
               <button onClick={() => setManagerView(true)}>
                 Analytics Dashboard
               </button>
@@ -246,61 +256,55 @@ const HomePage = () => {
           </div>
         </div>
       )}
-      {employeeView && employee && (
+      {(employeeView || managerView) && (
         <div>
-          <h2>Employee View Content</h2>
-          {/* Render menu items for the restaurant the employee works for */}
-          {restaurants.map((restaurant) => {
-            if (employee.employed_for === restaurant.name) {
-              return (
-                <div key={restaurant._id}>
-                  <h3>{restaurant.name} Menu</h3>
-                  {/* Button to add a new item */}
-                  <button onClick={() => handleAddNewItem(restaurant._id)}>
-                    Add New Item
-                  </button>
-
-                  <div className="menu-items">
-                    {restaurant.menu.map((menuItem) => (
-                      <div key={menuItem._id} className="menu-item">
-                        <h4>{menuItem.name}</h4>
-                        <p>Description: {menuItem.description}</p>
-                        <p>Price: ${menuItem.price}</p>
-                        <button
-                          onClick={() =>
-                            toggleItemSoldOut(restaurant._id, menuItem._id)
-                          }
-                        >
-                          {menuItem.soldOut
-                            ? "Mark Available"
-                            : "Mark Sold Out"}
-                        </button>
-                        <button
-                          onClick={() =>
-                            deleteMenuItem(restaurant._id, menuItem._id)
-                          }
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    ))}
+          <h2>Menu Management</h2>
+          {/* Render menu items for all restaurants */}
+          {restaurants.map((restaurant) => (
+            <div key={restaurant._id}>
+              <h3>{restaurant.name} Menu</h3>
+              {/* Button to add a new item */}
+              <button onClick={() => handleAddNewItem(restaurant._id)}>
+                Add New Item
+              </button>
+              <div className="menu-items">
+                {restaurant.menu.map((menuItem) => (
+                  <div key={menuItem._id} className="menu-item">
+                    <h4>{menuItem.name}</h4>
+                    <p>Description: {menuItem.description}</p>
+                    <p>Price: ${menuItem.price}</p>
+                    <button
+                      onClick={() =>
+                        toggleItemSoldOut(restaurant._id, menuItem._id)
+                      }
+                    >
+                      {menuItem.soldOut ? "Mark Available" : "Mark Sold Out"}
+                    </button>
+                    <button
+                      onClick={() =>
+                        deleteMenuItem(restaurant._id, menuItem._id)
+                      }
+                    >
+                      Delete
+                    </button>
                   </div>
-                </div>
-              );
-            }
-            return null;
-          })}
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
+      {/* 
       {managerView && (
         <div>
           <h2>Manager View Content</h2>
-          {/* Add content specific to manager view */}
         </div>
-      )}
+      )} */}
       {userRole === "customer" &&
-        (!customerView || employeeView || managerView) && (
+        //        (!customerView || employeeView || managerView) && (
+
+        !customerView && (
           <div>
             <h2>My Orders </h2>
             {userOrders.map((order) => (
@@ -332,51 +336,56 @@ const HomePage = () => {
             ))}
           </div>
         )}
-
-      {userRole === "employee" && (!employeeView || managerView) && (
-        <div>
-          <h2>All Orders</h2>
-          {allOrders.map((order) => (
-            <div key={order._id} className="order-wrapper">
-              <p>Restaurant Name: {order.restaurant}</p>
-              <p>
-                Pickup Time:{" "}
-                {new Date(order.pickupTime).toLocaleString("en-US", {
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                  hour12: true,
-                })}
-              </p>
-              <p>Order ID: {order._id}</p>
-              <div>
-                {order.items.map((item) => (
-                  <p key={item._id}>
-                    {item.menuItem} - Quantity: {item.quantity}, Cost: $
-                    {item.quantity * getMenuPrice(item.menuItem)}
-                  </p>
-                ))}
+      {/* {(userRole === "employee" || userRole === "manager" || !employeeView || managerView) && ( */}
+      {(userRole === "employee" || userRole === "manager") &&
+        (!employeeView || managerView) && (
+          <div>
+            <h2>All Orders</h2>
+            {allOrders.map((order) => (
+              <div key={order._id} className="order-wrapper">
+                <p>Restaurant Name: {order.restaurant}</p>
+                <p>
+                  Pickup Time:{" "}
+                  {new Date(order.pickupTime).toLocaleString("en-US", {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                    hour12: true,
+                  })}
+                </p>
+                <p>Order ID: {order._id}</p>
+                <div>
+                  {order.items.map((item) => (
+                    <p key={item._id}>
+                      {item.menuItem} - Quantity: {item.quantity}, Cost: $
+                      {item.quantity * getMenuPrice(item.menuItem)}
+                    </p>
+                  ))}
+                </div>
+                <p>Total Price: ${order.totalPrice}</p>
+                <p>Order Status: {order.status}</p>
+                {/* Dropdown for statuses */}
+                <select
+                  value={order.status}
+                  onChange={(e) =>
+                    handleStatusChange(order._id, e.target.value)
+                  }
+                >
+                  <option value="ordered">Ordered</option>
+                  <option value="in-progress">In Progress</option>
+                  <option value="awaiting-pickup">Awaiting Pickup</option>
+                  <option value="completed">Completed</option>
+                </select>
+                {/* Button to confirm changes */}
+                <button onClick={() => handleConfirm(order._id)}>
+                  Confirm
+                </button>
               </div>
-              <p>Total Price: ${order.totalPrice}</p>
-              <p>Order Status: {order.status}</p>
-              {/* Dropdown for statuses */}
-              <select
-                value={order.status}
-                onChange={(e) => handleStatusChange(order._id, e.target.value)}
-              >
-                <option value="ordered">Ordered</option>
-                <option value="in-progress">In Progress</option>
-                <option value="awaiting-pickup">Awaiting Pickup</option>
-                <option value="completed">Completed</option>
-              </select>
-              {/* Button to confirm changes */}
-              <button onClick={() => handleConfirm(order._id)}>Confirm</button>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
     </div>
   );
 };
