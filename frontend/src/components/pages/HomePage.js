@@ -387,7 +387,9 @@ const HomePage = () => {
                   {order.items.map((item) => (
                     <p key={item._id}>
                       {item.menuItem} - Quantity: {item.quantity}, Cost: $
-                      {item.quantity * getMenuPrice(item.menuItem)}
+                      {parseFloat(
+                        (item.quantity * getMenuPrice(item.menuItem)).toFixed(2)
+                      )}
                     </p>
                   ))}
                 </div>
