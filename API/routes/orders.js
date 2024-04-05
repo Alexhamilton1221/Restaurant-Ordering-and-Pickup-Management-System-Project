@@ -53,9 +53,9 @@ router.post("/", async (req, res) => {
     const mstPickupTime = moment.tz(pickupTime, "America/Denver").toDate();
 
     // Subtract 6 hours from the pickupTime to adjust for the forward shift
-    const adjustedPickupTime = moment(mstPickupTime)
-      .subtract(6, "hours")
-      .toDate();
+    // const adjustedPickupTime = moment(mstPickupTime)
+    //   .subtract(6, "hours")
+    //   .toDate();
 
     // Create the order
     const newOrder = new Order({
@@ -63,7 +63,7 @@ router.post("/", async (req, res) => {
       restaurant,
       items,
       totalPrice,
-      pickupTime: adjustedPickupTime, // Adjusted pickupTime
+      pickupTime: mstPickupTime, // Adjusted pickupTime
       status: "ordered",
     });
 

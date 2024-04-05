@@ -174,8 +174,9 @@ const ManagerPage = () => {
 
     // Loop through all orders and count orders for each hour
     orders.forEach((order) => {
-      const pickupHour = moment(order.pickupTime).subtract(6, "hours").hour();
-      orderCountsPerHour[pickupHour]++;
+      // Parse the pickup time using moment.js and adjust for timezone
+      const pickupTime = moment(order.pickupTime).tz("YourTimezone").hour();
+      orderCountsPerHour[pickupTime]++;
     });
 
     // Find the maximum number of orders
@@ -438,10 +439,17 @@ const ManagerPage = () => {
             <div>
               {/* <p>Analyzing {allOrders.length} orders...</p> */}
               <div>
-                {getBusiestTime(allOrders).map((hour) => {
-                  const adjustedHour = moment(hour).add(6, "hours");
-                  return <p key={hour}>{adjustedHour.format("hh:mm a")}</p>;
-                })}
+                {getBusiestTime(allOrders).map((hour) => (
+                  <p key={hour}>
+                    {hour % 12 || 12}:
+                    {(hour % 12 === 0 ? 12 : hour % 12) < 10
+                      ? "00"
+                      : hour % 12 === hour
+                      ? "00"
+                      : hour % 12}
+                    {hour % 12 === hour ? "am" : "pm"}
+                  </p>
+                ))}
               </div>
               <div>
                 <h3>Most Popular Item(s):</h3>
