@@ -12,6 +12,12 @@ const HomePage = () => {
   const [allOrders, setAllOrders] = useState([]); // State to store all orders
   const [userRole, setUserRole] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(""); // State to store selected status for each order
+  const [addingNewItem, setAddingNewItem] = useState(false); // State to indicate if adding a new item
+  const [newItemName, setNewItemName] = useState(""); // State to store new item details
+  const [newItemPrice, setNewItemPrice] = useState(0);
+  const [newItemDescription, setNewItemDescription] = useState("");
+  const [confirmingItem, setConfirmingItem] = useState(false); // State to indicate confirming the new item
+  const [restaurantIdToAddItem, setRestaurantIdToAddItem] = useState(""); // State to store restaurant ID for adding item
 
   const navigate = useNavigate();
 
@@ -140,17 +146,52 @@ const HomePage = () => {
       alert("Error deleting menu item. See console for details.");
     }
   };
-  const handleAddNewItem = async (restaurantId) => {
+  // Function to handle adding a new item
+  const handleAddNewItem = (restaurantId) => {
+    // Update state to indicate adding a new item
+    setAddingNewItem(true);
+    setRestaurantIdToAddItem(restaurantId);
+  };
+
+  // Function to handle undoing the adding of a new item
+  const handleUndoAddNewItem = () => {
+    setAddingNewItem(false);
+    setNewItemName("");
+    setNewItemPrice(0);
+    setNewItemDescription("");
+  };
+
+  // Function to handle confirming the new item
+  const handleConfirmNewItem = async () => {
     try {
-      // Implement the logic to add a new item here
-      // For example, you can navigate to a new page to add a new item
-      // Or you can show a modal for adding a new item
-      console.log("Adding a new item for restaurant:", restaurantId);
+      // Send request to add new item
+      await axios.post(
+        `http://localhost:4000/restaurants/${restaurantIdToAddItem}/menu`,
+        {
+          name: newItemName,
+          price: newItemPrice,
+          description: newItemDescription,
+        }
+      );
+
+      // Refresh data after adding item
+      const restaurantsResponse = await axios.get(
+        "http://localhost:4000/restaurants"
+      );
+      setRestaurants(restaurantsResponse.data);
+
+      // Reset state
+      setAddingNewItem(false);
+      setNewItemName("");
+      setNewItemPrice(0);
+      setNewItemDescription("");
+      setRestaurantIdToAddItem("");
     } catch (error) {
       console.error("Error adding new item:", error);
       alert("Error adding new item. See console for details.");
     }
   };
+
   // Function to handle status change in the dropdown
   const handleStatusChange = (orderId, newStatus) => {
     try {
@@ -175,7 +216,7 @@ const HomePage = () => {
     }
   };
 
-  // Function to handle confirmation button click
+  // Function to handle confirmation button click for status change
   const handleConfirm = async (orderId) => {
     try {
       // Use the selectedStatus state variable instead of directly accessing the dropdown value
@@ -251,7 +292,43 @@ const HomePage = () => {
               <button onClick={() => handleAddNewItem(restaurant._id)}>
                 Add New Item
               </button>
-              <div className="menu-items">
+              {/* Form to add a new item */}
+              {addingNewItem && restaurantIdToAddItem === restaurant._id && (
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Item Name"
+                    value={newItemName}
+                    onChange={(e) => setNewItemName(e.target.value)}
+                  />
+                  <input
+                    type="number"
+                    placeholder="Item Price"
+                    value={newItemPrice}
+                    onChange={(e) =>
+                      setNewItemPrice(parseFloat(e.target.value))
+                    }
+                  />
+                  <input
+                    type="text"
+                    placeholder="Item Description"
+                    value={newItemDescription}
+                    onChange={(e) => setNewItemDescription(e.target.value)}
+                  />
+                  <button onClick={handleUndoAddNewItem}>Undo</button>
+                  <button onClick={handleConfirmNewItem}>Confirm</button>
+                </div>
+              )}
+              {/* Display existing menu items */}
+              <div
+                className="menu-items"
+                style={{
+                  display:
+                    addingNewItem && restaurantIdToAddItem === restaurant._id
+                      ? "none"
+                      : "block",
+                }}
+              >
                 {restaurant.menu.map((menuItem) => (
                   <div key={menuItem._id} className="menu-item">
                     <h4>{menuItem.name}</h4>

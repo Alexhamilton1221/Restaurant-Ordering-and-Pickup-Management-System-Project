@@ -133,17 +133,34 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// Add item to restaurant's menu
 router.post("/:id/menu", async (req, res) => {
   try {
-    const { name, price, description, soldOut } = req.body;
-    const menuItem = new MenuItem({
+    const { id } = req.params; // Restaurant ID
+    const { name, price, description, soldOut } = req.body; // New menu item details
+
+    // Find the restaurant by ID
+    const restaurant = await Restaurant.findById(id);
+    if (!restaurant) {
+      return res.status(404).json({ message: "Restaurant not found" });
+    }
+
+    // Create a new menu item
+    const newMenuItem = new MenuItem({
       name,
       price,
       description,
       soldOut: soldOut || false, // Default to false if not provided
     });
-    const newMenuItem = await menuItem.save();
+
+    // Save the new menu item to get its _id
+    await newMenuItem.save();
+
+    // Push the _id of the new menu item to the restaurant's menu array
+    restaurant.menu.push(newMenuItem._id);
+
+    // Save the changes to the restaurant
+    await restaurant.save();
+
     res.status(201).json(newMenuItem);
   } catch (err) {
     res.status(400).json({ message: err.message });
