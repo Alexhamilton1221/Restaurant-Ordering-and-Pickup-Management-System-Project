@@ -24,7 +24,7 @@ Content-Type: application/json
 ### Delete order
 DELETE http://localhost:4000/orders/65fb54fa7dd8d9d6de172ac9
 
-### Update order
+### Update ordeTi
 PATCH http://localhost:4000/orders/65fb3b8b8520f755e67b654f
 Content-Type: application/json
 {

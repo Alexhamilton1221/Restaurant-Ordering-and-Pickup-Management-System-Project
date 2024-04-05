@@ -147,6 +147,32 @@ const ManagerPage = () => {
       return 0;
     }
   };
+  // Function to analyze the busiest time
+  const getBusiestTime = (orders) => {
+    // Initialize an array to count orders for each hour
+    const orderCountsPerHour = Array(24).fill(0);
+
+    // Loop through all orders and count orders for each hour
+    orders.forEach((order) => {
+      const pickupHour = new Date(order.pickupTime).getHours();
+      orderCountsPerHour[pickupHour]++;
+    });
+
+    // Find the maximum number of orders
+    const maxOrders = Math.max(...orderCountsPerHour);
+
+    // Find the hour(s) with the maximum number of orders
+    const busiestHours = orderCountsPerHour.reduce((acc, count, index) => {
+      if (count === maxOrders) {
+        acc.push(index);
+      }
+      return acc;
+    }, []);
+
+    // Return the busiest hours
+    return busiestHours;
+  };
+
   return (
     <div className="manager_page">
       <h1>Welcome to the Manager Dashboard, {userFullName}!</h1>
@@ -256,7 +282,24 @@ const ManagerPage = () => {
       {showAnalytics && (
         <div>
           <h2>Analytics Dashboard</h2>
-          <p>Analytics Dashboard content goes here...</p>
+          <h3>Peak Time</h3>
+          {allOrders.length > 0 ? (
+            <div>
+              {/* <p>Analyzing {allOrders.length} orders...</p> */}
+              <div>
+                {/* <p>Busiest Time(s):</p> */}
+                {getBusiestTime(allOrders).map((hour) => (
+                  <p key={hour}>
+                    {hour % 12 || 12}:
+                    {(hour % 12 === 0 ? 12 : hour % 12) < 10 ? "00" : ""}
+                    {hour % 12 === hour ? "am" : "pm"}
+                  </p>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <p>No orders available for analysis.</p>
+          )}
         </div>
       )}
     </div>
