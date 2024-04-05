@@ -149,19 +149,18 @@ const Menu = () => {
             <h1>{restaurant.name} Menu</h1>
             <h2>Click items to add to cart</h2>
             <div className="menu-items-container">
-              {menuItems.map((menuItem) => (
-                <div
-                  key={menuItem._id}
-                  className={`menu-item-block ${
-                    menuItem.soldOut ? "sold-out" : ""
-                  }`}
-                  onClick={() => addToCart(menuItem)}
-                >
-                  <h3>{menuItem.name}</h3>
-                  <p>Price: ${menuItem.price}</p>
-                  {menuItem.soldOut && <span>(Sold Out)</span>}
-                </div>
-              ))}
+              {menuItems
+                .filter((menuItem) => !menuItem.soldOut) // Filter out sold-out items
+                .map((menuItem) => (
+                  <div
+                    key={menuItem._id}
+                    className={`menu-item-block`}
+                    onClick={() => addToCart(menuItem)}
+                  >
+                    <h3>{menuItem.name}</h3>
+                    <p>Price: ${menuItem.price}</p>
+                  </div>
+                ))}
             </div>
           </>
         ) : (
