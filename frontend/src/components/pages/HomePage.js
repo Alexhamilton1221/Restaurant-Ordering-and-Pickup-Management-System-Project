@@ -342,8 +342,7 @@ const HomePage = () => {
               <div>
                 {order.items.map((item) => (
                   <p key={item._id}>
-                    {item.menuItem} - Quantity: {item.quantity}, Cost: $
-                    {item.quantity * getMenuPrice(item.menuItem)}
+                    {item.menuItem} - Quantity: {item.quantity}
                   </p>
                 ))}
               </div>

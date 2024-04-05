@@ -10,6 +10,8 @@ const ManagerPage = () => {
   const [allOrders, setAllOrders] = useState([]);
   const [userRole, setUserRole] = useState("manager");
   const [showAnalytics, setShowAnalytics] = useState(false);
+  const [userOrders, setUserOrders] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState("");
 
   const navigate = useNavigate();
 
@@ -28,6 +30,11 @@ const ManagerPage = () => {
             );
             setAllOrders(ordersResponse.data);
           }
+
+          const ordersResponse = await axios.get(
+            `http://localhost:4000/orders/user/${user.name}`
+          );
+          setUserOrders(ordersResponse.data);
         }
 
         const restaurantsResponse = await axios.get(
@@ -117,10 +124,23 @@ const ManagerPage = () => {
     }
   };
 
-  // Function to handle status change in the dropdown
   const handleStatusChange = (orderId, newStatus) => {
     try {
-      // Update order status logic
+      // Update the local state with the new status for the specific order
+      setUserOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === orderId ? { ...order, status: newStatus } : order
+        )
+      );
+
+      setAllOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === orderId ? { ...order, status: newStatus } : order
+        )
+      );
+
+      // Update the selected status state
+      setSelectedStatus(newStatus);
     } catch (error) {
       console.error("Error updating order status:", error);
       alert("Error updating order status. See console for details.");
@@ -130,7 +150,11 @@ const ManagerPage = () => {
   // Function to handle confirmation button click
   const handleConfirm = async (orderId) => {
     try {
-      // Confirm order logic
+      // Use the selectedStatus state variable instead of directly accessing the dropdown value
+      await axios.patch(`http://localhost:4000/orders/${orderId}/status`, {
+        status: selectedStatus,
+      });
+      console.log("Order confirmed:", orderId);
     } catch (error) {
       console.error("Error confirming order:", error);
       alert("Error confirming order. See console for details.");
@@ -173,11 +197,48 @@ const ManagerPage = () => {
     return busiestHours;
   };
 
+  // Function to analyze the most popular item
+  const getMostPopularItem = (orders) => {
+    // Initialize an object to count the occurrences of each item
+    const itemCounts = {};
+
+    // Loop through all orders and count occurrences of each item
+    orders.forEach((order) => {
+      order.items.forEach((item) => {
+        const itemName = item.menuItem;
+        if (itemCounts[itemName]) {
+          itemCounts[itemName]++;
+        } else {
+          itemCounts[itemName] = 1;
+        }
+      });
+    });
+
+    // Find the item(s) with the maximum count
+    let maxCount = 0;
+    let mostPopularItems = [];
+    for (const itemName in itemCounts) {
+      const count = itemCounts[itemName];
+      if (count > maxCount) {
+        maxCount = count;
+        mostPopularItems = [itemName];
+      } else if (count === maxCount) {
+        mostPopularItems.push(itemName);
+      }
+    }
+
+    return mostPopularItems;
+  };
+
   return (
     <div className="manager_page">
       <h1>Welcome to the Manager Dashboard, {userFullName}!</h1>
       <div className="manager-buttons">
-        <button onClick={() => setMenuManagementView(true)}>
+        <button
+          onClick={() => {
+            setMenuManagementView(true);
+          }}
+        >
           Menu Management
         </button>
 
@@ -255,8 +316,7 @@ const ManagerPage = () => {
               <div>
                 {order.items.map((item) => (
                   <p key={item._id}>
-                    {item.menuItem} - Quantity: {item.quantity}, Cost: $
-                    {item.quantity * getMenuPrice(item.menuItem)}
+                    {item.menuItem} - Quantity: {item.quantity}
                   </p>
                 ))}
               </div>
@@ -287,13 +347,18 @@ const ManagerPage = () => {
             <div>
               {/* <p>Analyzing {allOrders.length} orders...</p> */}
               <div>
-                {/* <p>Busiest Time(s):</p> */}
                 {getBusiestTime(allOrders).map((hour) => (
                   <p key={hour}>
                     {hour % 12 || 12}:
                     {(hour % 12 === 0 ? 12 : hour % 12) < 10 ? "00" : ""}
                     {hour % 12 === hour ? "am" : "pm"}
                   </p>
+                ))}
+              </div>
+              <div>
+                <h3>Most Popular Item:</h3>
+                {getMostPopularItem(allOrders).map((itemName) => (
+                  <p key={itemName}>{itemName}</p>
                 ))}
               </div>
             </div>
