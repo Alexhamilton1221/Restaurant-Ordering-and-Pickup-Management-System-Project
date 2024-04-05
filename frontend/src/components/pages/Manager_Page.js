@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "../styles/HomePage.css";
 import { useNavigate } from "react-router-dom";
 
-const HomePage = () => {
+const ManagerPage = () => {
   const [userFullName, setUserFullName] = useState("");
   const [restaurants, setRestaurants] = useState([]);
-  const [customerView, setCustomerView] = useState(true);
-  const [employeeView, setEmployeeView] = useState(false);
+  const [menuManagementView, setMenuManagementView] = useState(true);
+  const [allOrders, setAllOrders] = useState([]);
+  const [userRole, setUserRole] = useState("manager");
   const [userOrders, setUserOrders] = useState([]);
-  const [allOrders, setAllOrders] = useState([]); // State to store all orders
-  const [userRole, setUserRole] = useState("");
+
   const [selectedStatus, setSelectedStatus] = useState(""); // State to store selected status for each order
 
   const navigate = useNavigate();
-
-  const [employee, setEmployee] = useState(null); // State to store employee data
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,20 +23,7 @@ const HomePage = () => {
           setUserFullName(user.name);
           setUserRole(user.role);
 
-          const ordersResponse = await axios.get(
-            `http://localhost:4000/orders/user/${user.name}`
-          );
-          setUserOrders(ordersResponse.data);
-
-          if (userRole === "employee") {
-            // Fetch employee data
-            const employeeResponse = await axios.get(
-              `http://localhost:4000/users/${user._id}` // Updated URL
-            );
-
-            setEmployee(employeeResponse.data);
-
-            // Fetch all orders for employees
+          if (userRole === "manager") {
             const ordersResponse = await axios.get(
               `http://localhost:4000/orders`
             );
@@ -57,7 +41,7 @@ const HomePage = () => {
     };
 
     fetchData();
-  }, [userRole]); // Fetch data whenever user role changes
+  }, [userRole]);
 
   const handleRestaurantClick = (restaurantId) => {
     localStorage.setItem("selectedRestaurantId", restaurantId);
@@ -188,59 +172,22 @@ const HomePage = () => {
       alert("Error confirming order. See console for details.");
     }
   };
-  useEffect(() => {
-    // Check if the user is an employee and set the employee view accordingly
-    if (userRole === "employee") {
-      setEmployeeView(true);
-      setCustomerView(false);
-    }
-    // } else if (userRole === "manager") {
-    //   navigate("/Manager_Page");
-    // }
-  }, [userRole]);
 
   return (
-    <div className="homepage">
-      <div className="homepage-header">
-        <h1>Welcome to MealMate, {userFullName}!</h1>
-        <div className="homepage-buttons">
-          {userRole === "customer" && (
-            <>
-              <button onClick={() => setCustomerView(true)}>Restaurants</button>
-              <button onClick={() => setCustomerView(false)}>Orders</button>
-            </>
-          )}
-          {userRole === "employee" && (
-            <>
-              <button onClick={() => setEmployeeView(true)}>
-                Menu Management
-              </button>
-              <button onClick={() => setEmployeeView(false)}>
-                Order Processing
-              </button>
-            </>
-          )}
-        </div>
+    <div className="manager-page">
+      <h1>Welcome to the Manager Dashboard, {userFullName}!</h1>
+      <div className="manager-buttons">
+        <button onClick={() => setMenuManagementView(true)}>
+          Menu Management
+        </button>
+        <button onClick={() => setMenuManagementView(false)}>
+          Order Processing
+        </button>
+        <button onClick={() => navigate("/analytics-dashboard")}>
+          Analytics Dashboard
+        </button>
       </div>
-      {customerView && (
-        <div>
-          <h2>Choose a restaurant to order from:</h2>
-          <div className="restaurant-list">
-            {restaurants.map((restaurant) => (
-              <div
-                key={restaurant._id}
-                className="restaurant-block"
-                onClick={() => handleRestaurantClick(restaurant._id)}
-              >
-                <h3>{restaurant.name}</h3>
-                <p>{restaurant.location}</p>
-                <p>Rating: {restaurant.rating}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-      {employeeView && (
+      {menuManagementView && (
         <div>
           <h2>Menu Management</h2>
           {/* Render menu items for all restaurants */}
@@ -278,51 +225,10 @@ const HomePage = () => {
           ))}
         </div>
       )}
-
-      {/* 
-      {managerView && (
+      {!menuManagementView && (
         <div>
-          <h2>Manager View Content</h2>
-        </div>
-      )} */}
-      {userRole === "customer" &&
-        //        (!customerView || employeeView || managerView) && (
-
-        !customerView && (
-          <div>
-            <h2>My Orders </h2>
-            {userOrders.map((order) => (
-              <div key={order._id} className="order-wrapper">
-                <p>Restaurant Name: {order.restaurant}</p>
-                <p>
-                  Pickup Time:{" "}
-                  {new Date(order.pickupTime).toLocaleString("en-US", {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric",
-                    hour: "numeric",
-                    minute: "numeric",
-                    hour12: true,
-                  })}
-                </p>
-                <p>Order ID: {order._id}</p>
-                <div>
-                  {order.items.map((item) => (
-                    <p key={item._id}>
-                      {item.menuItem} - Quantity: {item.quantity}, Cost: $
-                      {item.quantity * getMenuPrice(item.menuItem)}
-                    </p>
-                  ))}
-                </div>
-                <p>Total Price: ${order.totalPrice}</p>
-                <p>Order Status: {order.status}</p>
-              </div>
-            ))}
-          </div>
-        )}
-      {/* {(userRole === "employee" || userRole === "manager" || !employeeView || managerView) && ( */}
-      {userRole === "employee" && !employeeView && (
-        <div>
+          <h2>Order Processing</h2>
+          {/* All Orders section */}
           <h2>All Orders</h2>
           {allOrders.map((order) => (
             <div key={order._id} className="order-wrapper">
@@ -369,4 +275,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default ManagerPage;

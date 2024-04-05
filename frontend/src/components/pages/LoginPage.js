@@ -20,8 +20,12 @@ const Login = () => {
       localStorage.setItem("user", JSON.stringify(response.data.user));
 
       console.log("Login successful:", response.data);
-
-      navigate("/homepage");
+      if (response.data.user.role === "manager") {
+        // Navigate to the manager dashboard page
+        navigate("/manager_page");
+      } else {
+        navigate("/homepage");
+      }
     } catch (error) {
       console.error("Login failed:", error);
       // Handle login failure, e.g., display error message to the user
