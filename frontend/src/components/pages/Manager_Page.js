@@ -225,6 +225,27 @@ const ManagerPage = () => {
 
     return mostPopularItems;
   };
+
+  const deleteOrder = async (orderId) => {
+    try {
+      // Make a DELETE request to your server API to delete the order
+      await axios.delete(`http://localhost:4000/orders/${orderId}`);
+
+      // Update the local state to reflect the deletion
+      setAllOrders((prevOrders) =>
+        prevOrders.filter((order) => order._id !== orderId)
+      );
+      setUserOrders((prevOrders) =>
+        prevOrders.filter((order) => order._id !== orderId)
+      );
+
+      console.log("Order deleted successfully:", orderId);
+    } catch (error) {
+      console.error("Error deleting order:", error);
+      alert("Error deleting order. See console for details.");
+    }
+  };
+
   // Function to handle confirming the new item
   const handleConfirmNewItem = async () => {
     try {
@@ -402,6 +423,8 @@ const ManagerPage = () => {
               </select>
               {/* Button to confirm changes */}
               <button onClick={() => handleConfirm(order._id)}>Confirm</button>
+              {/* Button to delete the order */}
+              <button onClick={() => deleteOrder(order._id)}>Process</button>
             </div>
           ))}
         </div>
