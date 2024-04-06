@@ -19,6 +19,7 @@ const ManagerPage = () => {
   const [newItemPrice, setNewItemPrice] = useState(0);
   const [newItemDescription, setNewItemDescription] = useState("");
   const [confirmingItem, setConfirmingItem] = useState(false); // State to indicate confirming the new item
+  const [user, setUser] = useState(null); // State to store the user data
 
   const navigate = useNavigate();
 
@@ -28,6 +29,8 @@ const ManagerPage = () => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
           const user = JSON.parse(storedUser);
+          setUser(user); // Set the user state
+
           setUserFullName(user.name);
           setUserRole(user.role);
 
@@ -322,67 +325,78 @@ const ManagerPage = () => {
         <div>
           <h2>Menu Management</h2>
           {/* Render menu items for all restaurants */}
-          {restaurants.map((restaurant) => (
-            <div key={restaurant._id}>
-              <h3>{restaurant.name} Menu</h3>
-              {/* Button to add a new item */}
-              <button onClick={() => handleAddNewItem(restaurant._id)}>
-                Add New Item
-              </button>
-              {/* Form to add a new item */}
-              {addingNewItem && restaurantIdToAddItem === restaurant._id && (
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Item Name"
-                    value={newItemName}
-                    onChange={(e) => setNewItemName(e.target.value)}
-                  />
-                  <input
-                    type="number"
-                    placeholder="Item Price"
-                    value={newItemPrice}
-                    onChange={(e) =>
-                      setNewItemPrice(parseFloat(e.target.value))
-                    }
-                  />
-                  <input
-                    type="text"
-                    placeholder="Item Description"
-                    value={newItemDescription}
-                    onChange={(e) => setNewItemDescription(e.target.value)}
-                  />
-                  <button onClick={handleUndoAddNewItem}>Undo</button>
-                  <button onClick={handleConfirmNewItem}>Confirm</button>
-                </div>
-              )}
-              <div className="menu-items">
-                {restaurant.menu.map((menuItem) => (
-                  <div key={menuItem._id} className="menu-item">
-                    <h4>{menuItem.name}</h4>
-                    <p>Description: {menuItem.description}</p>
-                    <p>Price: ${menuItem.price}</p>
-                    <button
-                      onClick={() =>
-                        toggleItemSoldOut(restaurant._id, menuItem._id)
-                      }
-                    >
-                      {menuItem.soldOut ? "Mark Available" : "Mark Sold Out"}
-                    </button>
-                    <button
-                      onClick={() =>
-                        deleteMenuItem(restaurant._id, menuItem._id)
-                      }
-                    >
-                      Delete
-                    </button>
+          {restaurants.map((restaurant) => {
+            if (user && user.employed_for === restaurant.name) {
+              return (
+                <div key={restaurant._id}>
+                  <h3>{restaurant.name} Menu</h3>
+                  {/* Button to add a new item */}
+                  <button onClick={() => handleAddNewItem(restaurant._id)}>
+                    Add New Item
+                  </button>
+                  {/* Form to add a new item */}
+                  {addingNewItem &&
+                    restaurantIdToAddItem === restaurant._id && (
+                      <div>
+                        <input
+                          type="text"
+                          placeholder="Item Name"
+                          value={newItemName}
+                          onChange={(e) => setNewItemName(e.target.value)}
+                        />
+                        <input
+                          type="number"
+                          placeholder="Item Price"
+                          value={newItemPrice}
+                          onChange={(e) =>
+                            setNewItemPrice(parseFloat(e.target.value))
+                          }
+                        />
+                        <input
+                          type="text"
+                          placeholder="Item Description"
+                          value={newItemDescription}
+                          onChange={(e) =>
+                            setNewItemDescription(e.target.value)
+                          }
+                        />
+                        <button onClick={handleUndoAddNewItem}>Undo</button>
+                        <button onClick={handleConfirmNewItem}>Confirm</button>
+                      </div>
+                    )}
+                  <div className="menu-items">
+                    {restaurant.menu.map((menuItem) => (
+                      <div key={menuItem._id} className="menu-item">
+                        <h4>{menuItem.name}</h4>
+                        <p>Description: {menuItem.description}</p>
+                        <p>Price: ${menuItem.price}</p>
+                        <button
+                          onClick={() =>
+                            toggleItemSoldOut(restaurant._id, menuItem._id)
+                          }
+                        >
+                          {menuItem.soldOut
+                            ? "Mark Available"
+                            : "Mark Sold Out"}
+                        </button>
+                        <button
+                          onClick={() =>
+                            deleteMenuItem(restaurant._id, menuItem._id)
+                          }
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
-          ))}
+                </div>
+              );
+            }
+            return null;
+          })}
         </div>
       )}
+
       {!menuManagementView && !showAnalytics && (
         <div>
           <h2>Order Processing</h2>
